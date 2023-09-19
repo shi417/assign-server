@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.assign.mapper.TokensMapper">
+
+    <resultMap id="BaseResultMap" type="com.assign.entity.po.TokensPO">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="objectId" column="object_id" jdbcType="BIGINT"/>
+            <result property="objectType" column="object_type" jdbcType="TINYINT"/>
+            <result property="refreshToken" column="refresh_token" jdbcType="VARCHAR"/>
+            <result property="accessToken" column="access_token" jdbcType="VARCHAR"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+            <result property="deletedAt" column="deleted_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,object_id,object_type,
+        refresh_token,access_token,created_at,
+        updated_at,deleted_at
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from tokens
+        where  id = #{id,jdbcType=BIGINT} 
+    </select>
+    <select id="getTokens" resultType="com.assign.entity.po.TokensPO">
+        select <include refid="Base_Column_List" />
+       from tokens
+        where object_type = 1 and deleted_at is null
+    </select>
+    <select id="getShopIds" resultType="java.lang.Integer">
+        select object_id from tokens where object_type = 1 and deleted_at is null group by object_id
+    </select>
+    <select id="getTokenById" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" />
+        from tokens
+        where object_id = #{shopId} and deleted_at is null order by created_at desc limit 1
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from tokens
+        where  id = #{id,jdbcType=BIGINT} 
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.assign.entity.po.TokensPO" useGeneratedKeys="true">
+        insert into tokens
+        ( id,object_id,object_type
+        ,refresh_token,access_token,created_at
+        ,updated_at,deleted_at)
+        values (#{id,jdbcType=BIGINT},#{objectId,jdbcType=BIGINT},#{objectType,jdbcType=TINYINT}
+        ,#{refreshToken,jdbcType=VARCHAR},#{accessToken,jdbcType=VARCHAR},#{createdAt,jdbcType=TIMESTAMP}
+        ,#{updatedAt,jdbcType=TIMESTAMP},#{deletedAt,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.assign.entity.po.TokensPO" useGeneratedKeys="true">
+        insert into tokens
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">id,</if>
+                <if test="objectId != null">object_id,</if>
+                <if test="objectType != null">object_type,</if>
+                <if test="refreshToken != null">refresh_token,</if>
+                <if test="accessToken != null">access_token,</if>
+                <if test="createdAt != null">created_at,</if>
+                <if test="updatedAt != null">updated_at,</if>
+                <if test="deletedAt != null">deleted_at,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null">#{id,jdbcType=BIGINT},</if>
+                <if test="objectId != null">#{objectId,jdbcType=BIGINT},</if>
+                <if test="objectType != null">#{objectType,jdbcType=TINYINT},</if>
+                <if test="refreshToken != null">#{refreshToken,jdbcType=VARCHAR},</if>
+                <if test="accessToken != null">#{accessToken,jdbcType=VARCHAR},</if>
+                <if test="createdAt != null">#{createdAt,jdbcType=TIMESTAMP},</if>
+                <if test="updatedAt != null">#{updatedAt,jdbcType=TIMESTAMP},</if>
+                <if test="deletedAt != null">#{deletedAt,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.assign.entity.po.TokensPO">
+        update tokens
+        <set>
+                <if test="objectId != null">
+                    object_id = #{objectId,jdbcType=BIGINT},
+                </if>
+                <if test="objectType != null">
+                    object_type = #{objectType,jdbcType=TINYINT},
+                </if>
+                <if test="refreshToken != null">
+                    refresh_token = #{refreshToken,jdbcType=VARCHAR},
+                </if>
+                <if test="accessToken != null">
+                    access_token = #{accessToken,jdbcType=VARCHAR},
+                </if>
+                <if test="createdAt != null">
+                    created_at = #{createdAt,jdbcType=TIMESTAMP},
+                </if>
+                <if test="updatedAt != null">
+                    updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+                </if>
+                <if test="deletedAt != null">
+                    deleted_at = #{deletedAt,jdbcType=TIMESTAMP},
+                </if>
+        </set>
+        where   id = #{id,jdbcType=BIGINT} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.assign.entity.po.TokensPO">
+        update tokens
+        set 
+            object_id =  #{objectId,jdbcType=BIGINT},
+            object_type =  #{objectType,jdbcType=TINYINT},
+            refresh_token =  #{refreshToken,jdbcType=VARCHAR},
+            access_token =  #{accessToken,jdbcType=VARCHAR},
+            created_at =  #{createdAt,jdbcType=TIMESTAMP},
+            updated_at =  #{updatedAt,jdbcType=TIMESTAMP},
+            deleted_at =  #{deletedAt,jdbcType=TIMESTAMP}
+        where   id = #{id,jdbcType=BIGINT} 
+    </update>
+</mapper>

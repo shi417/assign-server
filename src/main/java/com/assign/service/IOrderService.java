@@ -1,14 +1,20 @@
 package com.assign.service;
 
-import com.assign.entity.Order;
+import com.assign.entity.dto.shopee.ShopeeOrderDTO;
+import com.assign.entity.po.OrderPO;
 
+import java.util.Date;
 import java.util.List;
 
 public interface IOrderService {
 
-    List<Order> getAllOrders();
+    List<OrderPO> getAllOrders();
 
-    Order getOrderById(Long id);
+    OrderPO getOrderById(Long id);
 
-    void doClaim(String orderCode, String userCode);
+    void doAssign(String orderCode, String userCode);
+
+    Date getOrderMaxDate();
+
+    void batchInsertOrders(List<ShopeeOrderDTO> orderDTOS);
 }
