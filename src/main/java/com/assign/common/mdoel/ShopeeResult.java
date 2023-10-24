@@ -1,5 +1,6 @@
 package com.assign.common.mdoel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
@@ -17,7 +18,7 @@ public class ShopeeResult<T> {
 
     private String message;
 
-    @SerializedName("request_id")
+    @JsonProperty("request_id")
     private String requestId;
 
     private T response;

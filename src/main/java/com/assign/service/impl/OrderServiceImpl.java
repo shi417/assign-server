@@ -1,16 +1,18 @@
 package com.assign.service.impl;
 
-import com.assign.entity.dto.shopee.ShopeeDetailDTO;
+import com.alibaba.nacos.common.utils.StringUtils;
+import com.assign.entity.common.ResponseResult;
 import com.assign.entity.dto.shopee.ShopeeOrderDTO;
-import com.assign.entity.po.OrderPO;
 import com.assign.entity.po.ShopeeOrderPO;
 import com.assign.mapper.ShopeeOrderMapper;
-import com.assign.service.IOrderService;
+import com.assign.service.OrderService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.List;
 
@@ -24,39 +26,30 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class OrderServiceImpl implements IOrderService {
+public class OrderServiceImpl  extends ServiceImpl<ShopeeOrderMapper,ShopeeOrderPO>
+        implements OrderService {
 
     @Autowired
     private ShopeeOrderMapper shopeeOrderMapper;
 
     @Override
-    public List<OrderPO> getAllOrders() {
-        return null;
+    public Date getMaxUpdateDate() {
+        Long max = shopeeOrderMapper.getMaxUpdateDate();
+        return new Date(max*1000);
     }
 
     @Override
-    public OrderPO getOrderById(Long id) {
-        return null;
-    }
-
-    @Override
-    public void doAssign(String orderCode, String userCode) {
-
-    }
-
-    @Override
-    public Date getOrderMaxDate() {
-        return shopeeOrderMapper.selectMaxUpdateDate();
-    }
-
-    @Override
-    public void batchInsertOrders(List<ShopeeOrderDTO> orderDTOS) {
-        for (ShopeeOrderDTO order : orderDTOS){
-            ShopeeOrderPO po = new ShopeeOrderPO();
-            BeanUtils.copyProperties(order,po);
-            shopeeOrderMapper.insert(po);
-            List<ShopeeDetailDTO> shopeeDetailDTO = order.getShopeeDetailDTO();
-
+    public List<ShopeeOrderPO> getOrderList(ShopeeOrderDTO params) {
+        QueryWrapper<ShopeeOrderPO> queryWrapper =  new QueryWrapper<>();
+        if (StringUtils.isNotEmpty(params.getOrderStatus())){
+            queryWrapper.lambda().eq(ShopeeOrderPO::getOrderStatus, params.getOrderStatus());
         }
+        if (StringUtils.isNotEmpty(params.getOrderSn())){
+            queryWrapper.lambda().eq(ShopeeOrderPO::getOrderSn, params.getOrderSn());
+        }
+        IPage<ShopeeOrderPO> page = new Page<>(params.getCurrentPage(),params.getPageSize());
+        return shopeeOrderMapper.selectList(page, queryWrapper);
     }
+
+
 }

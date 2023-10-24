@@ -2,7 +2,7 @@ package com.assign.mapper;
 
 import com.assign.entity.po.ShopeeOrderPO;
 import org.apache.ibatis.annotations.Mapper;
-
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import java.util.Date;
 
 /**
@@ -12,7 +12,7 @@ import java.util.Date;
 * @Entity com.assign.entity.po.ShopeeOrderPO
 */
 @Mapper
-public interface ShopeeOrderMapper {
+public interface ShopeeOrderMapper extends BaseMapper<ShopeeOrderPO>{
 
     int deleteByPrimaryKey(Long id);
 
@@ -27,4 +27,6 @@ public interface ShopeeOrderMapper {
     int updateByPrimaryKey(ShopeeOrderPO record);
 
     Date selectMaxUpdateDate();
+
+    Long getMaxUpdateDate();
 }

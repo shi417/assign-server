@@ -4,6 +4,7 @@ package com.assign.entity.dto.shopee;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
@@ -13,11 +14,11 @@ import lombok.Data;
 @Data
 public class OrderListResponseDTO {
 
-    @SerializedName("more")
+    @JsonProperty("more")
     private Boolean more;
-    @SerializedName("next_cursor")
+    @JsonProperty("next_cursor")
     private String nextCursor;
-    @SerializedName("order_list")
+    @JsonProperty("order_list")
     private List<Map<String,String>> orderList;
 
 }

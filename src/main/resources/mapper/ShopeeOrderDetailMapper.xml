@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.assign.mapper.ShopeeOrderDetailMapper">
+
+    <resultMap id="BaseResultMap" type="com.assign.entity.po.ShopeeOrderDetailPO">
+            <id property="itemId" column="item_id" jdbcType="INTEGER"/>
+            <result property="addOnDeal" column="add_on_deal" jdbcType="TINYINT"/>
+            <result property="addOnDealId" column="add_on_deal_id" jdbcType="INTEGER"/>
+            <result property="itemName" column="item_name" jdbcType="VARCHAR"/>
+            <result property="itemSku" column="item_sku" jdbcType="VARCHAR"/>
+            <result property="mainItem" column="main_item" jdbcType="TINYINT"/>
+            <result property="modelDiscountedPrice" column="model_discounted_price" jdbcType="DECIMAL"/>
+            <result property="modelId" column="model_id" jdbcType="INTEGER"/>
+            <result property="modelName" column="model_name" jdbcType="VARCHAR"/>
+            <result property="modelOriginalPrice" column="model_original_price" jdbcType="DECIMAL"/>
+            <result property="modelQuantity" column="model_quantity" jdbcType="INTEGER"/>
+            <result property="modelQuantityPurchased" column="model_quantity_purchased" jdbcType="INTEGER"/>
+            <result property="modelSku" column="model_sku" jdbcType="VARCHAR"/>
+            <result property="orderItemId" column="order_item_id" jdbcType="INTEGER"/>
+            <result property="promotionGroupId" column="promotion_group_id" jdbcType="INTEGER"/>
+            <result property="promotionId" column="promotion_id" jdbcType="INTEGER"/>
+            <result property="promotionType" column="promotion_type" jdbcType="VARCHAR"/>
+            <result property="weight" column="weight" jdbcType="DECIMAL"/>
+            <result property="wholesale" column="wholesale" jdbcType="TINYINT"/>
+            <result property="orderSn" column="order_sn" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        item_id,add_on_deal,add_on_deal_id,
+        item_name,item_sku,main_item,
+        model_discounted_price,model_id,model_name,
+        model_original_price,model_quantity,model_quantity_purchased,
+        model_sku,order_item_id,promotion_group_id,
+        promotion_id,promotion_type,weight,
+        wholesale,order_sn
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from shopee_order_detail
+        where  item_id = #{itemId,jdbcType=INTEGER} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from shopee_order_detail
+        where  item_id = #{itemId,jdbcType=INTEGER} 
+    </delete>
+    <insert id="insert" keyColumn="item_id" keyProperty="itemId" parameterType="com.assign.entity.po.ShopeeOrderDetailPO" useGeneratedKeys="true">
+        insert into shopee_order_detail
+        ( item_id,add_on_deal,add_on_deal_id
+        ,item_name,item_sku,main_item
+        ,model_discounted_price,model_id,model_name
+        ,model_original_price,model_quantity,model_quantity_purchased
+        ,model_sku,order_item_id,promotion_group_id
+        ,promotion_id,promotion_type,weight
+        ,wholesale,order_sn)
+        values (#{itemId,jdbcType=INTEGER},#{addOnDeal,jdbcType=TINYINT},#{addOnDealId,jdbcType=INTEGER}
+        ,#{itemName,jdbcType=VARCHAR},#{itemSku,jdbcType=VARCHAR},#{mainItem,jdbcType=TINYINT}
+        ,#{modelDiscountedPrice,jdbcType=DECIMAL},#{modelId,jdbcType=INTEGER},#{modelName,jdbcType=VARCHAR}
+        ,#{modelOriginalPrice,jdbcType=DECIMAL},#{modelQuantity,jdbcType=INTEGER},#{modelQuantityPurchased,jdbcType=INTEGER}
+        ,#{modelSku,jdbcType=VARCHAR},#{orderItemId,jdbcType=INTEGER},#{promotionGroupId,jdbcType=INTEGER}
+        ,#{promotionId,jdbcType=INTEGER},#{promotionType,jdbcType=VARCHAR},#{weight,jdbcType=DECIMAL}
+        ,#{wholesale,jdbcType=TINYINT},#{orderSn,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="item_id" keyProperty="itemId" parameterType="com.assign.entity.po.ShopeeOrderDetailPO" useGeneratedKeys="true">
+        insert into shopee_order_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="itemId != null">item_id,</if>
+                <if test="addOnDeal != null">add_on_deal,</if>
+                <if test="addOnDealId != null">add_on_deal_id,</if>
+                <if test="itemName != null">item_name,</if>
+                <if test="itemSku != null">item_sku,</if>
+                <if test="mainItem != null">main_item,</if>
+                <if test="modelDiscountedPrice != null">model_discounted_price,</if>
+                <if test="modelId != null">model_id,</if>
+                <if test="modelName != null">model_name,</if>
+                <if test="modelOriginalPrice != null">model_original_price,</if>
+                <if test="modelQuantity != null">model_quantity,</if>
+                <if test="modelQuantityPurchased != null">model_quantity_purchased,</if>
+                <if test="modelSku != null">model_sku,</if>
+                <if test="orderItemId != null">order_item_id,</if>
+                <if test="promotionGroupId != null">promotion_group_id,</if>
+                <if test="promotionId != null">promotion_id,</if>
+                <if test="promotionType != null">promotion_type,</if>
+                <if test="weight != null">weight,</if>
+                <if test="wholesale != null">wholesale,</if>
+                <if test="orderSn != null">order_sn,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="itemId != null">#{itemId,jdbcType=INTEGER},</if>
+                <if test="addOnDeal != null">#{addOnDeal,jdbcType=TINYINT},</if>
+                <if test="addOnDealId != null">#{addOnDealId,jdbcType=INTEGER},</if>
+                <if test="itemName != null">#{itemName,jdbcType=VARCHAR},</if>
+                <if test="itemSku != null">#{itemSku,jdbcType=VARCHAR},</if>
+                <if test="mainItem != null">#{mainItem,jdbcType=TINYINT},</if>
+                <if test="modelDiscountedPrice != null">#{modelDiscountedPrice,jdbcType=DECIMAL},</if>
+                <if test="modelId != null">#{modelId,jdbcType=INTEGER},</if>
+                <if test="modelName != null">#{modelName,jdbcType=VARCHAR},</if>
+                <if test="modelOriginalPrice != null">#{modelOriginalPrice,jdbcType=DECIMAL},</if>
+                <if test="modelQuantity != null">#{modelQuantity,jdbcType=INTEGER},</if>
+                <if test="modelQuantityPurchased != null">#{modelQuantityPurchased,jdbcType=INTEGER},</if>
+                <if test="modelSku != null">#{modelSku,jdbcType=VARCHAR},</if>
+                <if test="orderItemId != null">#{orderItemId,jdbcType=INTEGER},</if>
+                <if test="promotionGroupId != null">#{promotionGroupId,jdbcType=INTEGER},</if>
+                <if test="promotionId != null">#{promotionId,jdbcType=INTEGER},</if>
+                <if test="promotionType != null">#{promotionType,jdbcType=VARCHAR},</if>
+                <if test="weight != null">#{weight,jdbcType=DECIMAL},</if>
+                <if test="wholesale != null">#{wholesale,jdbcType=TINYINT},</if>
+                <if test="orderSn != null">#{orderSn,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.assign.entity.po.ShopeeOrderDetailPO">
+        update shopee_order_detail
+        <set>
+                <if test="addOnDeal != null">
+                    add_on_deal = #{addOnDeal,jdbcType=TINYINT},
+                </if>
+                <if test="addOnDealId != null">
+                    add_on_deal_id = #{addOnDealId,jdbcType=INTEGER},
+                </if>
+                <if test="itemName != null">
+                    item_name = #{itemName,jdbcType=VARCHAR},
+                </if>
+                <if test="itemSku != null">
+                    item_sku = #{itemSku,jdbcType=VARCHAR},
+                </if>
+                <if test="mainItem != null">
+                    main_item = #{mainItem,jdbcType=TINYINT},
+                </if>
+                <if test="modelDiscountedPrice != null">
+                    model_discounted_price = #{modelDiscountedPrice,jdbcType=DECIMAL},
+                </if>
+                <if test="modelId != null">
+                    model_id = #{modelId,jdbcType=INTEGER},
+                </if>
+                <if test="modelName != null">
+                    model_name = #{modelName,jdbcType=VARCHAR},
+                </if>
+                <if test="modelOriginalPrice != null">
+                    model_original_price = #{modelOriginalPrice,jdbcType=DECIMAL},
+                </if>
+                <if test="modelQuantity != null">
+                    model_quantity = #{modelQuantity,jdbcType=INTEGER},
+                </if>
+                <if test="modelQuantityPurchased != null">
+                    model_quantity_purchased = #{modelQuantityPurchased,jdbcType=INTEGER},
+                </if>
+                <if test="modelSku != null">
+                    model_sku = #{modelSku,jdbcType=VARCHAR},
+                </if>
+                <if test="orderItemId != null">
+                    order_item_id = #{orderItemId,jdbcType=INTEGER},
+                </if>
+                <if test="promotionGroupId != null">
+                    promotion_group_id = #{promotionGroupId,jdbcType=INTEGER},
+                </if>
+                <if test="promotionId != null">
+                    promotion_id = #{promotionId,jdbcType=INTEGER},
+                </if>
+                <if test="promotionType != null">
+                    promotion_type = #{promotionType,jdbcType=VARCHAR},
+                </if>
+                <if test="weight != null">
+                    weight = #{weight,jdbcType=DECIMAL},
+                </if>
+                <if test="wholesale != null">
+                    wholesale = #{wholesale,jdbcType=TINYINT},
+                </if>
+                <if test="orderSn != null">
+                    order_sn = #{orderSn,jdbcType=VARCHAR},
+                </if>
+        </set>
+        where   item_id = #{itemId,jdbcType=INTEGER} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.assign.entity.po.ShopeeOrderDetailPO">
+        update shopee_order_detail
+        set 
+            add_on_deal =  #{addOnDeal,jdbcType=TINYINT},
+            add_on_deal_id =  #{addOnDealId,jdbcType=INTEGER},
+            item_name =  #{itemName,jdbcType=VARCHAR},
+            item_sku =  #{itemSku,jdbcType=VARCHAR},
+            main_item =  #{mainItem,jdbcType=TINYINT},
+            model_discounted_price =  #{modelDiscountedPrice,jdbcType=DECIMAL},
+            model_id =  #{modelId,jdbcType=INTEGER},
+            model_name =  #{modelName,jdbcType=VARCHAR},
+            model_original_price =  #{modelOriginalPrice,jdbcType=DECIMAL},
+            model_quantity =  #{modelQuantity,jdbcType=INTEGER},
+            model_quantity_purchased =  #{modelQuantityPurchased,jdbcType=INTEGER},
+            model_sku =  #{modelSku,jdbcType=VARCHAR},
+            order_item_id =  #{orderItemId,jdbcType=INTEGER},
+            promotion_group_id =  #{promotionGroupId,jdbcType=INTEGER},
+            promotion_id =  #{promotionId,jdbcType=INTEGER},
+            promotion_type =  #{promotionType,jdbcType=VARCHAR},
+            weight =  #{weight,jdbcType=DECIMAL},
+            wholesale =  #{wholesale,jdbcType=TINYINT},
+            order_sn =  #{orderSn,jdbcType=VARCHAR}
+        where   item_id = #{itemId,jdbcType=INTEGER} 
+    </update>
+</mapper>

@@ -5,7 +5,7 @@
 <mapper namespace="com.assign.mapper.ShopeeOrderMapper">
 
     <resultMap id="BaseResultMap" type="com.assign.entity.po.ShopeeOrderPO">
-            <id property="id" column="id" jdbcType="BIGINT"/>
+            <id property="id" column="id" jdbcType="VARCHAR"/>
             <result property="actualShippingFee" column="actual_shipping_fee" jdbcType="DOUBLE"/>
             <result property="actualShippingFeeConfirmed" column="actual_shipping_fee_confirmed" jdbcType="TINYINT"/>
             <result property="buyerCancelReason" column="buyer_cancel_reason" jdbcType="VARCHAR"/>
@@ -64,6 +64,9 @@
     </select>
     <select id="selectMaxUpdateDate" resultType="java.util.Date">
         select max(update_time) from shopee_order;
+    </select>
+    <select id="getMaxUpdateDate" resultType="java.lang.Long">
+        select Max(update_time) from shopee_order
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">

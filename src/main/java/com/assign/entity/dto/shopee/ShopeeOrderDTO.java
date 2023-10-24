@@ -2,86 +2,94 @@
 package com.assign.entity.dto.shopee;
 
 import java.util.List;
+
+import com.assign.entity.dto.common.ConmonDTO;
+import com.assign.entity.dto.shopee.request.CommonRequestDTO;
+import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 @Data
-public class ShopeeOrderDTO {
+public class ShopeeOrderDTO extends ConmonDTO {
 
-    @SerializedName("actual_shipping_fee")
+    @JsonProperty("actual_shipping_fee")
     private Double actualShippingFee;
-    @SerializedName("actual_shipping_fee_confirmed")
+    @JsonProperty("actual_shipping_fee_confirmed")
     private Boolean actualShippingFeeConfirmed;
-    @SerializedName("buyer_cancel_reason")
+    @JsonProperty("buyer_cancel_reason")
     private String buyerCancelReason;
-    @SerializedName("buyer_cpf_id")
+    @JsonProperty("buyer_cpf_id")
     private String buyerCpfId;
-    @SerializedName("buyer_user_id")
+    @JsonProperty("buyer_user_id")
     private Long buyerUserId;
-    @SerializedName("buyer_username")
+    @JsonProperty("buyer_username")
     private String buyerUsername;
-    @SerializedName("cancel_by")
+    @JsonProperty("cancel_by")
     private String cancelBy;
-    @SerializedName("cancel_reason")
+    @JsonProperty("cancel_reason")
     private String cancelReason;
-    @SerializedName("checkout_shipping_carrier")
+    @JsonProperty("checkout_shipping_carrier")
     private String checkoutShippingCarrier;
     @Expose
-    private Boolean cod;
-    @SerializedName("create_time")
+    private Boolean cod;//是否是货到付款
+    @JsonProperty("create_time")
     private Long createTime;
     @Expose
     private String currency;
-    @SerializedName("days_to_ship")
+    @JsonProperty("days_to_ship")
     private Long daysToShip;
     @Expose
     private String dropshipper;
-    @SerializedName("dropshipper_phone")
+    @JsonProperty("dropshipper_phone")
     private String dropshipperPhone;
-    @SerializedName("estimated_shipping_fee")
+    @JsonProperty("estimated_shipping_fee")
     private Double estimatedShippingFee;
-    @SerializedName("fulfillment_flag")
+    @JsonProperty("fulfillment_flag")
     private String fulfillmentFlag;
-    @SerializedName("goods_to_declare")
+    @JsonProperty("goods_to_declare")
     private Boolean goodsToDeclare;
-    @SerializedName("invoice_data")
+    @JsonProperty("invoice_data")
     private InvoiceDTO invoiceData;
-    @SerializedName("item_list")
-    private List<ShopeeDetailDTO> shopeeDetailDTO;
-    @SerializedName("message_to_seller")
+    @JsonProperty("item_list")
+    private List<ShopeeOrderDetailDTO> shopeeOrderDetailDTO;
+    @JsonProperty("message_to_seller")
     private String messageToSeller;
     @Expose
     private String note;
-    @SerializedName("note_update_time")
+    @JsonProperty("note_update_time")
     private Long noteUpdateTime;
-    @SerializedName("order_sn")
+    @JsonProperty("order_sn")
     private String orderSn;
-    @SerializedName("order_status")
+    @JsonProperty("order_status")
     private String orderStatus;
-    @SerializedName("package_list")
+    @JsonProperty("package_list")
     private List<PackageList> packageList;
-    @SerializedName("pay_time")
+    @JsonProperty("pay_time")
     private Long payTime;
-    @SerializedName("payment_method")
+    @JsonProperty("pay_time_begin")
+    private Long payTimeBegin;
+    @JsonProperty("pay_time_end")
+    private Long payTimeEnd;
+    @JsonProperty("payment_method")
     private String paymentMethod;
-    @SerializedName("pickup_done_time")
+    @JsonProperty("pickup_done_time")//取货时间
     private Long pickupDoneTime;
-    @SerializedName("recipient_address")
+    @JsonProperty("recipient_address")
     private RecipientAddress recipientAddress;
     @Expose
     private String region;
-    @SerializedName("reverse_shipping_fee.")
+    @JsonProperty("reverse_shipping_fee.")
     private Double reverseShippingFee;
-    @SerializedName("ship_by_date")
+    @JsonProperty("ship_by_date")// 截至寄出时间
     private Long shipByDate;
-    @SerializedName("shipping_carrier")
+    @JsonProperty("shipping_carrier")
     private String shippingCarrier;
-    @SerializedName("split_up")
+    @JsonProperty("split_up")
     private Boolean splitUp;
-    @SerializedName("total_amount")
+    @JsonProperty("total_amount")
     private Double totalAmount;
-    @SerializedName("update_time")
+    @JsonProperty("update_time")
     private Long updateTime;
 
 }

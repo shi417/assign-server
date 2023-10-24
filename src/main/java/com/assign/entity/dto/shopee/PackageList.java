@@ -2,19 +2,20 @@
 package com.assign.entity.dto.shopee;
 
 import java.util.List;
-import com.google.gson.annotations.SerializedName;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class PackageList {
 
-    @SerializedName("item_list")
-    private List<ShopeeDetailDTO> shopeeDetailDTO;
-    @SerializedName("logistics_status")
+    @JsonProperty("item_list")
+    private List<ShopeeOrderDetailDTO> shopeeOrderDetailDTO;
+    @JsonProperty("logistics_status")
     private String logisticsStatus;
-    @SerializedName("package_number")
+    @JsonProperty("package_number")
     private String packageNumber;
-    @SerializedName("shipping_carrier")
+    @JsonProperty("shipping_carrier")
     private String shippingCarrier;
 
 }

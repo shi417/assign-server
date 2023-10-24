@@ -2,50 +2,52 @@
 package com.assign.entity.dto.shopee;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 @Data
-public class ShopeeDetailDTO {
+public class ShopeeItemDTO {
 
-    @SerializedName("add_on_deal")
+    @JsonProperty("add_on_deal")
     private Boolean addOnDeal;
-    @SerializedName("add_on_deal_id")
+    @JsonProperty("add_on_deal_id")
     private Long addOnDealId;
-    @SerializedName("image_info")
+    @JsonProperty("image_info")
     private ImageInfo imageInfo;
-    @SerializedName("item_id")
+    @JsonProperty("item_id")
     private Long itemId;
-    @SerializedName("item_name")
+    @JsonProperty("item_name")
     private String itemName;
-    @SerializedName("item_sku")
+    @JsonProperty("item_sku")
     private String itemSku;
-    @SerializedName("main_item")
+    @JsonProperty("main_item")
     private Boolean mainItem;
-    @SerializedName("model_discounted_price")
+    @JsonProperty("model_discounted_price")
     private Long modelDiscountedPrice;
-    @SerializedName("model_id")
+    @JsonProperty("model_id")
     private Long modelId;
-    @SerializedName("model_name")
+    @JsonProperty("model_name")
     private String modelName;
-    @SerializedName("model_original_price")
+    @JsonProperty("model_original_price")
     private Long modelOriginalPrice;
-    @SerializedName("model_quantity")
+    @JsonProperty("model_quantity")
     private Long modelQuantity;
-    @SerializedName("model_quantity_purchased")
+    @JsonProperty("model_quantity_purchased")
     private Long modelQuantityPurchased;
-    @SerializedName("model_sku")
+    @JsonProperty("model_sku")
     private String modelSku;
-    @SerializedName("order_item_id")
+    @JsonProperty("order_item_id")
     private Long orderItemId;
-    @SerializedName("product_location_id")
+    @JsonProperty("product_location_id")
     private List<String> productLocationId;
-    @SerializedName("promotion_group_id")
+    @JsonProperty("promotion_group_id")
     private Long promotionGroupId;
-    @SerializedName("promotion_id")
+    @JsonProperty("promotion_id")
     private Long promotionId;
-    @SerializedName("promotion_type")
+    @JsonProperty("promotion_type")
     private String promotionType;
     @Expose
     private Double weight;

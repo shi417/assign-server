@@ -1,6 +1,7 @@
 
 package com.assign.entity.dto.shopee;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
@@ -12,7 +13,7 @@ public class RecipientAddress {
     private String city;
     @Expose
     private String district;
-    @SerializedName("full_address")
+    @JsonProperty("full_address")
     private String fullAddress;
     @Expose
     private String name;

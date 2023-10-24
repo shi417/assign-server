@@ -3,6 +3,8 @@ package com.assign.entity.po;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
@@ -10,11 +12,12 @@ import lombok.Data;
  * @TableName shopee_order
  */
 @Data
+@TableName("shopee_order")
 public class ShopeeOrderPO implements Serializable {
     /**
      * root_id
      */
-    private Long id;
+    private String id;
 
     /**
      * 0
@@ -69,7 +72,7 @@ public class ShopeeOrderPO implements Serializable {
     /**
      * 0
      */
-    private Date createTime;
+    private Long createTime;
 
     /**
      * 
@@ -134,7 +137,7 @@ public class ShopeeOrderPO implements Serializable {
     /**
      * 0
      */
-    private Date payTime;
+    private Long payTime;
 
     /**
      * 
@@ -159,7 +162,7 @@ public class ShopeeOrderPO implements Serializable {
     /**
      * 0
      */
-    private Date shipByDate;
+    private Long shipByDate;
 
     /**
      * 

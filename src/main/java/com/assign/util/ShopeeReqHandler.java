@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,31 +41,26 @@ public class ShopeeReqHandler {
         TokensPO token =  tokenService.getTokenById(shopId);
         headers.put("access_token",token.getAccessToken());
         headers.put("shop_id",shopId);
-        headers.put("sign",getSign(path,timestamp));
+        headers.put("sign",getSign(path,timestamp,token,shopId));
         return headers;
     }
 
-    public String getSign(String path,long timestamp) {
+    public String getSign(String path, long timestamp, TokensPO token, Integer shopId) {
+        String tmpPartnerKey = key;
+        String tmpBaseString = String.format("%s%s%s%s%s", partnerId, path, timestamp,token.getAccessToken(),shopId);
+        byte[] partnerKey;
+        byte[] baseString;
+        String sign = "";
         try {
-            String data = String.format("%s%s%s",partnerId,path,timestamp);
-            Mac hmacSha256 = null;
-            hmacSha256 = Mac.getInstance("HmacSHA256");
-            // 使用密钥初始化HMAC实例
-            SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(), "HmacSHA256");
-            hmacSha256.init(secretKey);
-            // 计算哈希值
-            byte[] hashBytes = hmacSha256.doFinal(data.getBytes());
-            // 将哈希值转换为十六进制字符串
-            StringBuilder hexHash = new StringBuilder();
-            for (byte b : hashBytes) {
-                String hex = String.format("%02x", b);
-                hexHash.append(hex);
-            }
-            return hexHash.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        } catch (InvalidKeyException e) {
-            throw new RuntimeException(e);
+            baseString = tmpBaseString.getBytes("UTF-8");
+            partnerKey = tmpPartnerKey.getBytes("UTF-8");
+            Mac mac = Mac.getInstance("HmacSHA256");
+            SecretKeySpec secret_key = new SecretKeySpec(partnerKey, "HmacSHA256");
+            mac.init(secret_key);
+            sign = String.format("%064x",new BigInteger(1,mac.doFinal(baseString)));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return sign;
     }
 }
