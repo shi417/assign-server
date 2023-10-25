@@ -125,6 +125,9 @@ public class OrderTask {
         List<ShopeeOrderPO> pos = new ArrayList<>();
         List<ShopeeOrderDetailDTO> detailList = new ArrayList<>();
         for (ShopeeOrderDTO order : allOrders){
+            order.getShopeeOrderDetailDTO().forEach(e ->{
+                e.setOrderSn(order.getOrderSn());
+            });
             detailList.addAll(order.getShopeeOrderDetailDTO());
             ShopeeOrderPO po = new ShopeeOrderPO();
             BeanUtils.copyProperties(order,po);
@@ -175,7 +178,7 @@ public class OrderTask {
     /**
      * 增量更新订单表
      */
-    @Scheduled(fixedRate = 300000) // 每5分钟执行一次，以毫秒为单位
+//    @Scheduled(fixedRate = 300000) // 每5分钟执行一次，以毫秒为单位
     public void fetchOrders() {
         List<Integer> shopIds =  tokenService.getShopIds();
         for (Integer shopId : shopIds) {

@@ -16,7 +16,7 @@
             <result property="cancelReason" column="cancel_reason" jdbcType="VARCHAR"/>
             <result property="checkoutShippingCarrier" column="checkout_shipping_carrier" jdbcType="VARCHAR"/>
             <result property="cod" column="cod" jdbcType="TINYINT"/>
-            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="createTime" column="create_time" jdbcType="BIGINT"/>
             <result property="currency" column="currency" jdbcType="VARCHAR"/>
             <result property="daysToShip" column="days_to_ship" jdbcType="BIGINT"/>
             <result property="dropshipper" column="dropshipper" jdbcType="VARCHAR"/>
@@ -29,12 +29,12 @@
             <result property="noteUpdateTime" column="note_update_time" jdbcType="TIMESTAMP"/>
             <result property="orderSn" column="order_sn" jdbcType="VARCHAR"/>
             <result property="orderStatus" column="order_status" jdbcType="VARCHAR"/>
-            <result property="payTime" column="pay_time" jdbcType="TIMESTAMP"/>
+            <result property="payTime" column="pay_time" jdbcType="BIGINT"/>
             <result property="paymentMethod" column="payment_method" jdbcType="VARCHAR"/>
             <result property="pickupDoneTime" column="pickup_done_time" jdbcType="BIGINT"/>
             <result property="region" column="region" jdbcType="VARCHAR"/>
             <result property="reverseShippingFee" column="reverse_shipping_fee" jdbcType="DOUBLE"/>
-            <result property="shipByDate" column="ship_by_date" jdbcType="TIMESTAMP"/>
+            <result property="shipByDate" column="ship_by_date" jdbcType="BIGINT"/>
             <result property="shippingCarrier" column="shipping_carrier" jdbcType="VARCHAR"/>
             <result property="splitUp" column="split_up" jdbcType="TINYINT"/>
             <result property="totalAmount" column="total_amount" jdbcType="DOUBLE"/>
@@ -60,18 +60,12 @@
         select
         <include refid="Base_Column_List" />
         from shopee_order
-        where  id = #{id,jdbcType=BIGINT} 
-    </select>
-    <select id="selectMaxUpdateDate" resultType="java.util.Date">
-        select max(update_time) from shopee_order;
-    </select>
-    <select id="getMaxUpdateDate" resultType="java.lang.Long">
-        select Max(update_time) from shopee_order
+        where  id = #{id,jdbcType=VARCHAR} 
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from shopee_order
-        where  id = #{id,jdbcType=BIGINT} 
+        where  id = #{id,jdbcType=VARCHAR} 
     </delete>
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.assign.entity.po.ShopeeOrderPO" useGeneratedKeys="true">
         insert into shopee_order
@@ -87,16 +81,16 @@
         ,region,reverse_shipping_fee,ship_by_date
         ,shipping_carrier,split_up,total_amount
         ,update_time)
-        values (#{id,jdbcType=BIGINT},#{actualShippingFee,jdbcType=DOUBLE},#{actualShippingFeeConfirmed,jdbcType=TINYINT}
+        values (#{id,jdbcType=VARCHAR},#{actualShippingFee,jdbcType=DOUBLE},#{actualShippingFeeConfirmed,jdbcType=TINYINT}
         ,#{buyerCancelReason,jdbcType=VARCHAR},#{buyerCpfId,jdbcType=VARCHAR},#{buyerUserId,jdbcType=BIGINT}
         ,#{buyerUsername,jdbcType=VARCHAR},#{cancelBy,jdbcType=VARCHAR},#{cancelReason,jdbcType=VARCHAR}
-        ,#{checkoutShippingCarrier,jdbcType=VARCHAR},#{cod,jdbcType=TINYINT},#{createTime,jdbcType=TIMESTAMP}
+        ,#{checkoutShippingCarrier,jdbcType=VARCHAR},#{cod,jdbcType=TINYINT},#{createTime,jdbcType=BIGINT}
         ,#{currency,jdbcType=VARCHAR},#{daysToShip,jdbcType=BIGINT},#{dropshipper,jdbcType=VARCHAR}
         ,#{dropshipperPhone,jdbcType=VARCHAR},#{estimatedShippingFee,jdbcType=DOUBLE},#{fulfillmentFlag,jdbcType=VARCHAR}
         ,#{goodsToDeclare,jdbcType=TINYINT},#{messageToSeller,jdbcType=VARCHAR},#{note,jdbcType=VARCHAR}
         ,#{noteUpdateTime,jdbcType=TIMESTAMP},#{orderSn,jdbcType=VARCHAR},#{orderStatus,jdbcType=VARCHAR}
-        ,#{payTime,jdbcType=TIMESTAMP},#{paymentMethod,jdbcType=VARCHAR},#{pickupDoneTime,jdbcType=BIGINT}
-        ,#{region,jdbcType=VARCHAR},#{reverseShippingFee,jdbcType=DOUBLE},#{shipByDate,jdbcType=TIMESTAMP}
+        ,#{payTime,jdbcType=BIGINT},#{paymentMethod,jdbcType=VARCHAR},#{pickupDoneTime,jdbcType=BIGINT}
+        ,#{region,jdbcType=VARCHAR},#{reverseShippingFee,jdbcType=DOUBLE},#{shipByDate,jdbcType=BIGINT}
         ,#{shippingCarrier,jdbcType=VARCHAR},#{splitUp,jdbcType=TINYINT},#{totalAmount,jdbcType=DOUBLE}
         ,#{updateTime,jdbcType=BIGINT})
     </insert>
@@ -139,7 +133,7 @@
                 <if test="updateTime != null">update_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="id != null">#{id,jdbcType=BIGINT},</if>
+                <if test="id != null">#{id,jdbcType=VARCHAR},</if>
                 <if test="actualShippingFee != null">#{actualShippingFee,jdbcType=DOUBLE},</if>
                 <if test="actualShippingFeeConfirmed != null">#{actualShippingFeeConfirmed,jdbcType=TINYINT},</if>
                 <if test="buyerCancelReason != null">#{buyerCancelReason,jdbcType=VARCHAR},</if>
@@ -150,7 +144,7 @@
                 <if test="cancelReason != null">#{cancelReason,jdbcType=VARCHAR},</if>
                 <if test="checkoutShippingCarrier != null">#{checkoutShippingCarrier,jdbcType=VARCHAR},</if>
                 <if test="cod != null">#{cod,jdbcType=TINYINT},</if>
-                <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+                <if test="createTime != null">#{createTime,jdbcType=BIGINT},</if>
                 <if test="currency != null">#{currency,jdbcType=VARCHAR},</if>
                 <if test="daysToShip != null">#{daysToShip,jdbcType=BIGINT},</if>
                 <if test="dropshipper != null">#{dropshipper,jdbcType=VARCHAR},</if>
@@ -163,12 +157,12 @@
                 <if test="noteUpdateTime != null">#{noteUpdateTime,jdbcType=TIMESTAMP},</if>
                 <if test="orderSn != null">#{orderSn,jdbcType=VARCHAR},</if>
                 <if test="orderStatus != null">#{orderStatus,jdbcType=VARCHAR},</if>
-                <if test="payTime != null">#{payTime,jdbcType=TIMESTAMP},</if>
+                <if test="payTime != null">#{payTime,jdbcType=BIGINT},</if>
                 <if test="paymentMethod != null">#{paymentMethod,jdbcType=VARCHAR},</if>
                 <if test="pickupDoneTime != null">#{pickupDoneTime,jdbcType=BIGINT},</if>
                 <if test="region != null">#{region,jdbcType=VARCHAR},</if>
                 <if test="reverseShippingFee != null">#{reverseShippingFee,jdbcType=DOUBLE},</if>
-                <if test="shipByDate != null">#{shipByDate,jdbcType=TIMESTAMP},</if>
+                <if test="shipByDate != null">#{shipByDate,jdbcType=BIGINT},</if>
                 <if test="shippingCarrier != null">#{shippingCarrier,jdbcType=VARCHAR},</if>
                 <if test="splitUp != null">#{splitUp,jdbcType=TINYINT},</if>
                 <if test="totalAmount != null">#{totalAmount,jdbcType=DOUBLE},</if>
@@ -209,7 +203,7 @@
                     cod = #{cod,jdbcType=TINYINT},
                 </if>
                 <if test="createTime != null">
-                    create_time = #{createTime,jdbcType=TIMESTAMP},
+                    create_time = #{createTime,jdbcType=BIGINT},
                 </if>
                 <if test="currency != null">
                     currency = #{currency,jdbcType=VARCHAR},
@@ -248,7 +242,7 @@
                     order_status = #{orderStatus,jdbcType=VARCHAR},
                 </if>
                 <if test="payTime != null">
-                    pay_time = #{payTime,jdbcType=TIMESTAMP},
+                    pay_time = #{payTime,jdbcType=BIGINT},
                 </if>
                 <if test="paymentMethod != null">
                     payment_method = #{paymentMethod,jdbcType=VARCHAR},
@@ -263,7 +257,7 @@
                     reverse_shipping_fee = #{reverseShippingFee,jdbcType=DOUBLE},
                 </if>
                 <if test="shipByDate != null">
-                    ship_by_date = #{shipByDate,jdbcType=TIMESTAMP},
+                    ship_by_date = #{shipByDate,jdbcType=BIGINT},
                 </if>
                 <if test="shippingCarrier != null">
                     shipping_carrier = #{shippingCarrier,jdbcType=VARCHAR},
@@ -278,7 +272,7 @@
                     update_time = #{updateTime,jdbcType=BIGINT},
                 </if>
         </set>
-        where   id = #{id,jdbcType=BIGINT} 
+        where   id = #{id,jdbcType=VARCHAR} 
     </update>
     <update id="updateByPrimaryKey" parameterType="com.assign.entity.po.ShopeeOrderPO">
         update shopee_order
@@ -293,7 +287,7 @@
             cancel_reason =  #{cancelReason,jdbcType=VARCHAR},
             checkout_shipping_carrier =  #{checkoutShippingCarrier,jdbcType=VARCHAR},
             cod =  #{cod,jdbcType=TINYINT},
-            create_time =  #{createTime,jdbcType=TIMESTAMP},
+            create_time =  #{createTime,jdbcType=BIGINT},
             currency =  #{currency,jdbcType=VARCHAR},
             days_to_ship =  #{daysToShip,jdbcType=BIGINT},
             dropshipper =  #{dropshipper,jdbcType=VARCHAR},
@@ -306,16 +300,16 @@
             note_update_time =  #{noteUpdateTime,jdbcType=TIMESTAMP},
             order_sn =  #{orderSn,jdbcType=VARCHAR},
             order_status =  #{orderStatus,jdbcType=VARCHAR},
-            pay_time =  #{payTime,jdbcType=TIMESTAMP},
+            pay_time =  #{payTime,jdbcType=BIGINT},
             payment_method =  #{paymentMethod,jdbcType=VARCHAR},
             pickup_done_time =  #{pickupDoneTime,jdbcType=BIGINT},
             region =  #{region,jdbcType=VARCHAR},
             reverse_shipping_fee =  #{reverseShippingFee,jdbcType=DOUBLE},
-            ship_by_date =  #{shipByDate,jdbcType=TIMESTAMP},
+            ship_by_date =  #{shipByDate,jdbcType=BIGINT},
             shipping_carrier =  #{shippingCarrier,jdbcType=VARCHAR},
             split_up =  #{splitUp,jdbcType=TINYINT},
             total_amount =  #{totalAmount,jdbcType=DOUBLE},
             update_time =  #{updateTime,jdbcType=BIGINT}
-        where   id = #{id,jdbcType=BIGINT} 
+        where   id = #{id,jdbcType=VARCHAR} 
     </update>
 </mapper>

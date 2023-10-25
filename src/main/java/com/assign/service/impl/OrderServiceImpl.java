@@ -6,6 +6,7 @@ import com.assign.entity.dto.shopee.ShopeeOrderDTO;
 import com.assign.entity.po.ShopeeOrderPO;
 import com.assign.mapper.ShopeeOrderMapper;
 import com.assign.service.OrderService;
+import com.assign.util.CommonConsts;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -46,6 +47,9 @@ public class OrderServiceImpl  extends ServiceImpl<ShopeeOrderMapper,ShopeeOrder
         }
         if (StringUtils.isNotEmpty(params.getOrderSn())){
             queryWrapper.lambda().eq(ShopeeOrderPO::getOrderSn, params.getOrderSn());
+        }
+        if (params.getPageSize() > 100){
+            params.setPageSize(CommonConsts.MAX_PAGE_SIZE);
         }
         IPage<ShopeeOrderPO> page = new Page<>(params.getCurrentPage(),params.getPageSize());
         return shopeeOrderMapper.selectList(page, queryWrapper);

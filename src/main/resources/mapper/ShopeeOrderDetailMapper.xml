@@ -5,7 +5,7 @@
 <mapper namespace="com.assign.mapper.ShopeeOrderDetailMapper">
 
     <resultMap id="BaseResultMap" type="com.assign.entity.po.ShopeeOrderDetailPO">
-            <id property="itemId" column="item_id" jdbcType="INTEGER"/>
+            <id property="itemId" column="item_id" jdbcType="BIGINT"/>
             <result property="addOnDeal" column="add_on_deal" jdbcType="TINYINT"/>
             <result property="addOnDealId" column="add_on_deal_id" jdbcType="INTEGER"/>
             <result property="itemName" column="item_name" jdbcType="VARCHAR"/>
@@ -41,12 +41,12 @@
         select
         <include refid="Base_Column_List" />
         from shopee_order_detail
-        where  item_id = #{itemId,jdbcType=INTEGER} 
+        where  item_id = #{itemId,jdbcType=BIGINT} 
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from shopee_order_detail
-        where  item_id = #{itemId,jdbcType=INTEGER} 
+        where  item_id = #{itemId,jdbcType=BIGINT} 
     </delete>
     <insert id="insert" keyColumn="item_id" keyProperty="itemId" parameterType="com.assign.entity.po.ShopeeOrderDetailPO" useGeneratedKeys="true">
         insert into shopee_order_detail
@@ -57,7 +57,7 @@
         ,model_sku,order_item_id,promotion_group_id
         ,promotion_id,promotion_type,weight
         ,wholesale,order_sn)
-        values (#{itemId,jdbcType=INTEGER},#{addOnDeal,jdbcType=TINYINT},#{addOnDealId,jdbcType=INTEGER}
+        values (#{itemId,jdbcType=BIGINT},#{addOnDeal,jdbcType=TINYINT},#{addOnDealId,jdbcType=INTEGER}
         ,#{itemName,jdbcType=VARCHAR},#{itemSku,jdbcType=VARCHAR},#{mainItem,jdbcType=TINYINT}
         ,#{modelDiscountedPrice,jdbcType=DECIMAL},#{modelId,jdbcType=INTEGER},#{modelName,jdbcType=VARCHAR}
         ,#{modelOriginalPrice,jdbcType=DECIMAL},#{modelQuantity,jdbcType=INTEGER},#{modelQuantityPurchased,jdbcType=INTEGER}
@@ -90,7 +90,7 @@
                 <if test="orderSn != null">order_sn,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="itemId != null">#{itemId,jdbcType=INTEGER},</if>
+                <if test="itemId != null">#{itemId,jdbcType=BIGINT},</if>
                 <if test="addOnDeal != null">#{addOnDeal,jdbcType=TINYINT},</if>
                 <if test="addOnDealId != null">#{addOnDealId,jdbcType=INTEGER},</if>
                 <if test="itemName != null">#{itemName,jdbcType=VARCHAR},</if>
@@ -173,7 +173,7 @@
                     order_sn = #{orderSn,jdbcType=VARCHAR},
                 </if>
         </set>
-        where   item_id = #{itemId,jdbcType=INTEGER} 
+        where   item_id = #{itemId,jdbcType=BIGINT} 
     </update>
     <update id="updateByPrimaryKey" parameterType="com.assign.entity.po.ShopeeOrderDetailPO">
         update shopee_order_detail
@@ -197,6 +197,6 @@
             weight =  #{weight,jdbcType=DECIMAL},
             wholesale =  #{wholesale,jdbcType=TINYINT},
             order_sn =  #{orderSn,jdbcType=VARCHAR}
-        where   item_id = #{itemId,jdbcType=INTEGER} 
+        where   item_id = #{itemId,jdbcType=BIGINT} 
     </update>
 </mapper>

@@ -9,11 +9,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.Expose;
 import lombok.Data;
-
+import io.swagger.annotations.ApiModelProperty;
 @Data
 public class ShopeeOrderDTO extends ConmonDTO {
 
     @JsonProperty("actual_shipping_fee")
+    @ApiModelProperty(value = "订单的实际运费（如果有的话）来自外部物流合作伙伴")
     private Double actualShippingFee;
     @JsonProperty("actual_shipping_fee_confirmed")
     private Boolean actualShippingFeeConfirmed;

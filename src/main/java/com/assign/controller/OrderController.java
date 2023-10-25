@@ -22,7 +22,7 @@ public class OrderController {
     private OrderTask orderTask;
 
     @PostMapping("/list")
-    public ResponseResult<Object> getList(ShopeeOrderDTO params){
+    public ResponseResult<List<ShopeeOrderPO>> getList(ShopeeOrderDTO params){
         if (params.getPayTimeBegin() != null && params.getPayTimeEnd() != null ){
             long abs = Math.abs(params.getPayTimeEnd() * 1000 - params.getPayTimeBegin() * 1000);
             long daysDiff = abs / (1000 * 60 * 60 * 24);
@@ -31,7 +31,7 @@ public class OrderController {
             }
         }
         List<ShopeeOrderPO> list = orderService.getOrderList(params);
-        ResponseResult<Object> res = new ResponseResult<>();
+        ResponseResult<List<ShopeeOrderPO>> res = new ResponseResult<>();
         res.setData(list);
         return res;
     }
@@ -39,17 +39,10 @@ public class OrderController {
 
     @PostMapping("/doOrderTask")
     public void doOrderTask(){
-        orderTask.fetchOrders();
+//        orderTask.fetchOrders();
+        orderTask.fetchAllOrders();
     }
 
-    public static void main(String[] args) {
-        int p = 0;
-
-        while (p == 200){//一页最多200条
-            p++;
-            System.out.println("p:"+p);
-        }
-    }
 
 }
 

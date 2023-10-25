@@ -53,4 +53,5 @@ public class ShopeeOrderDetailDTO {
     @Expose
     private Boolean wholesale;
 
+    private String orderSn;
 }
