@@ -2,26 +2,21 @@ package com.assign.task;
 
 import com.assign.common.mdoel.ShopeeResult;
 import com.assign.constants.ShopeePathConstants;
-import com.assign.entity.dto.shopee.OrderListResponseDTO;
 import com.assign.entity.dto.shopee.ShopeeOrderDetailDTO;
-import com.assign.entity.dto.shopee.ShopeeOrderDTO;
-import com.assign.entity.dto.shopee.request.CommonRequestDTO;
-import com.assign.entity.dto.shopee.request.OrderDetailRequestDTO;
-import com.assign.entity.dto.shopee.request.OrderListRequestDTO;
+import com.assign.entity.dto.shopee.feign.*;
 import com.assign.entity.po.ShopeeOrderDetailPO;
 import com.assign.entity.po.ShopeeOrderPO;
-import com.assign.entity.po.TokensPO;
 import com.assign.feign.ShopeeOrderServer;
 import com.assign.service.OrderDetailService;
 import com.assign.service.OrderService;
-import com.assign.service.ITokenService;
+import com.assign.service.TokenService;
 import com.assign.util.ShopeeReqHandler;
+import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.jcodec.common.StringUtils;
 
@@ -43,7 +38,7 @@ public class OrderTask {
 
     private final ShopeeOrderServer shopeeOrderServer;
 
-    private final ITokenService tokenService;
+    private final TokenService tokenService;
 
     private final ShopeeReqHandler shopeeReqHandler;
 
@@ -72,7 +67,7 @@ public class OrderTask {
         //获取token
         List<Integer> shopIds =  tokenService.getShopIds();
         for (Integer shopId : shopIds) {
-            List<ShopeeOrderDTO> allOrders = new ArrayList<>();
+            List<ShopeeOrderRequireDTO> allOrders = new ArrayList<>();
             Date curr = new Date();
             Calendar c = Calendar.getInstance();
             c.setTime(curr);
@@ -92,28 +87,23 @@ public class OrderTask {
                    break;
                }
             }
-            batchInsertOrder(allOrders);
+            batchInsertOrder(allOrders, shopId);
         }
         log.info("所有店铺均已更新完成。");
 
     }
-    private void doRequire(List<ShopeeOrderDTO> allOrders, Integer shopId, Date from, Date to, String cursor) {
+    private void doRequire(List<ShopeeOrderRequireDTO> allOrders, Integer shopId, Date from, Date to, String cursor) {
         while(true){
-            OrderListRequestDTO request = genListRequestParam(shopId,from,to,cursor);
+            OrderListRequestVO request = genListRequestParam(shopId,from,to,cursor);
             log.info("请求订单request:{}",request);
-            ShopeeResult<OrderListResponseDTO> result = shopeeOrderServer.fetchOrderList(request);
+            ShopeeResult<ShopeeSimpleVO> result = shopeeOrderServer.fetchOrderList(request);
             log.info("ListResult:{}",result);
-            List<Map<String, String>> orderList = result.getResponse().getOrderList();
-            String sns = orderList.stream()
-                    .map(order -> order.get("order_sn"))
-                    .collect(Collectors.joining(","));
-            OrderListResponseDTO data = result.getResponse();
-            OrderDetailRequestDTO detailRequestDTO = genDetailRequestParam(shopId);
-            detailRequestDTO.setOrder_sn_list(sns);
-            detailRequestDTO.setResponse_optional_fields("item_list,pay_time,create_time,total_amount,buyer_cancel_reason,buyer_user_id,buyer_username,cancel_reason,cancelBy");
-            ShopeeResult<Map<String,List<ShopeeOrderDTO>>> detailResult = shopeeOrderServer.fetchOrderDetail(detailRequestDTO);
-            allOrders.addAll(detailResult.getResponse() !=null? detailResult.getResponse().get("order_list") : new ArrayList<>());
-            log.info("DetailResult:{}",detailResult);
+            ShopeeSimpleVO data = result.getResponse();
+
+            List<ShopeeOrderRequireDTO> orderRequests = getShopeeOrderRequire(data,shopId);
+
+            allOrders.addAll(orderRequests);
+            log.info("DetailResult:{}",orderRequests);
             if (StringUtils.isEmpty(data.getNextCursor())){
                 break;
             }
@@ -121,10 +111,39 @@ public class OrderTask {
         }
     }
 
-    private void batchInsertOrder(List<ShopeeOrderDTO> allOrders) {
+    private List<ShopeeOrderRequireDTO> getShopeeOrderRequire(ShopeeSimpleVO data, Integer shopId) {
+        List<Map<String, String>> orderList = data.getOrderList();
+        Integer size = orderList.size();
+        List<ShopeeOrderRequireDTO> res = new ArrayList<>();
+        int startIndex = 0;
+        while (true){
+            int endIndex = startIndex + 50;
+            if (endIndex > size){
+                endIndex = size;
+            }
+            List<Map<String, String>> temp = orderList.subList(startIndex, endIndex);
+            String sns = temp.stream()
+                    .map(order -> order.get("order_sn"))
+                    .collect(Collectors.joining(","));
+            OrderDetailRequestVO detailRequestDTO = genDetailRequestParam(shopId);
+            detailRequestDTO.setOrder_sn_list(sns);
+            detailRequestDTO.setResponse_optional_fields("item_list,pay_time,create_time,total_amount,buyer_cancel_reason,buyer_user_id,buyer_username,cancel_reason,cancelBy");
+            ShopeeResult<Map<String,List<ShopeeOrderRequireDTO>>> detailResult = shopeeOrderServer.fetchOrderDetail(detailRequestDTO);
+            if (detailResult.getResponse() != null){
+                res.addAll(detailResult.getResponse().get("order_list"));
+            }
+            startIndex = endIndex;
+            if (endIndex >= size){
+                break;
+            }
+        }
+        return res;
+    }
+
+    private void batchInsertOrder(List<ShopeeOrderRequireDTO> allOrders, Integer shopId) {
         List<ShopeeOrderPO> pos = new ArrayList<>();
         List<ShopeeOrderDetailDTO> detailList = new ArrayList<>();
-        for (ShopeeOrderDTO order : allOrders){
+        for (ShopeeOrderRequireDTO order : allOrders){
             order.getShopeeOrderDetailDTO().forEach(e ->{
                 e.setOrderSn(order.getOrderSn());
             });
@@ -132,6 +151,7 @@ public class OrderTask {
             ShopeeOrderPO po = new ShopeeOrderPO();
             BeanUtils.copyProperties(order,po);
             po.setId(po.getOrderSn());
+            po.setShopId(Long.valueOf(shopId));
             pos.add(po);
         }
         log.info("order入库size:{}",pos.size());
@@ -145,32 +165,22 @@ public class OrderTask {
         orderDetailService.saveOrUpdateBatch(details);
     }
 
-    private OrderDetailRequestDTO genDetailRequestParam(int shopId) {
-        OrderDetailRequestDTO dto = new OrderDetailRequestDTO();
-        initCommonParam(dto,shopId,ShopeePathConstants.GET_ORDER_DETAIL);
+    private OrderDetailRequestVO genDetailRequestParam(int shopId) {
+        OrderDetailRequestVO dto = new OrderDetailRequestVO();
+        shopeeReqHandler.initCommonParam(dto,shopId,ShopeePathConstants.GET_ORDER_DETAIL);
         return dto;
     }
 
 
-    private void initCommonParam(CommonRequestDTO dto,int shopId,String path){
-        dto.setPartner_id(partnerId);
-        TokensPO token =  tokenService.getTokenById(shopId);
-        dto.setAccess_token(token.getAccessToken());
-        dto.setShop_id(shopId);
-        long timestamp = System.currentTimeMillis()/1000;
-        dto.setTimestamp(timestamp);
-        dto.setSign(shopeeReqHandler.getSign(path,timestamp, token, shopId));
-    }
 
-
-    private OrderListRequestDTO genListRequestParam(Integer shopId, Date from, Date to, String cursor) {
-        OrderListRequestDTO dto = new OrderListRequestDTO();
+    private OrderListRequestVO genListRequestParam(Integer shopId, Date from, Date to, String cursor) {
+        OrderListRequestVO dto = new OrderListRequestVO();
         dto.setTime_range_field("update_time");
         dto.setTime_from((from.getTime()/1000));
         dto.setTime_to(to.getTime()/1000);
         dto.setPage_size(pageSize);
         dto.setCursor(cursor);
-        initCommonParam(dto,shopId,ShopeePathConstants.GET_ORDER_LIST);
+        shopeeReqHandler.initCommonParam(dto,shopId,ShopeePathConstants.GET_ORDER_LIST);
         return dto;
     }
 
@@ -182,15 +192,15 @@ public class OrderTask {
     public void fetchOrders() {
         List<Integer> shopIds =  tokenService.getShopIds();
         for (Integer shopId : shopIds) {
-            List<ShopeeOrderDTO> allOrders = new ArrayList<>();
+            List<ShopeeOrderRequireDTO> allOrders = new ArrayList<>();
             Date curr = new Date();
             Calendar c = Calendar.getInstance();
             c.setTime(curr);
             //创店最早日期
-            Date maxUpdateDate = orderService.getMaxUpdateDate();
+            Date maxUpdateDate = orderService.getMaxUpdateDate(shopId);
             if(maxUpdateDate == null){
-                fetchAllOrders();
-                return;
+                LocalDate createLocal = LocalDate.of(2022, 12, 1);
+                maxUpdateDate = Date.from(createLocal.atStartOfDay(ZoneId.systemDefault()).toInstant());
             }
             long millisecondsDifference = curr.getTime() - maxUpdateDate.getTime();
             // 计算天数差（毫秒转天）
@@ -212,7 +222,7 @@ public class OrderTask {
             }else{
                 doRequire(allOrders,shopId,maxUpdateDate,curr,"");
             }
-            batchInsertOrder(allOrders);
+            batchInsertOrder(allOrders,shopId);
             log.info("shopId增量任务结束 :{},curr日期:{}",shopId,curr);
         }
     }

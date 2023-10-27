@@ -2,7 +2,7 @@ package com.assign.service.impl;
 
 import com.assign.entity.po.TokensPO;
 import com.assign.mapper.TokensMapper;
-import com.assign.service.ITokenService;
+import com.assign.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ import java.util.List;
  * @date 2023/9/18.
  */
 @Service
-public class TokenServiceImpl implements ITokenService {
+public class TokenServiceImpl implements TokenService {
 
     @Autowired
     private TokensMapper tokensMapper;

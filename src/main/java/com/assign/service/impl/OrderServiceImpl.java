@@ -1,19 +1,34 @@
 package com.assign.service.impl;
 
 import com.alibaba.nacos.common.utils.StringUtils;
-import com.assign.entity.common.ResponseResult;
-import com.assign.entity.dto.shopee.ShopeeOrderDTO;
+import com.assign.common.mdoel.ShopeeResult;
+import com.assign.constants.ShopeePathConstants;
+import com.assign.entity.common.PageResult;
+import com.assign.entity.dto.shopee.OrderListResponseDTO;
+import com.assign.entity.dto.shopee.ShopeeDetailResponseDTO;
+import com.assign.entity.dto.shopee.ShopeeOrderRequestDTO;
+import com.assign.entity.dto.shopee.feign.ShopeeShopRequestVO;
+import com.assign.entity.dto.shopee.feign.ShopeeShopVO;
+import com.assign.entity.po.ShopeeOrderDetailPO;
 import com.assign.entity.po.ShopeeOrderPO;
+import com.assign.feign.ShopeeOrderServer;
+import com.assign.mapper.ShopeeOrderDetailMapper;
 import com.assign.mapper.ShopeeOrderMapper;
+import com.assign.service.AssignService;
 import com.assign.service.OrderService;
-import com.assign.util.CommonConsts;
+import com.assign.constants.CommonConsts;
+import com.assign.util.OrderStatusEnum;
+import com.assign.util.ShopeeReqHandler;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,20 +42,33 @@ import java.util.List;
  */
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class OrderServiceImpl  extends ServiceImpl<ShopeeOrderMapper,ShopeeOrderPO>
         implements OrderService {
 
-    @Autowired
-    private ShopeeOrderMapper shopeeOrderMapper;
+
+    private final ShopeeOrderMapper shopeeOrderMapper;
+
+    private final ShopeeOrderDetailMapper shopeeOrderDetailMapper;
+
+    private final ShopeeReqHandler shopeeReqHandler;
+
+    private  final ShopeeOrderServer shopeeOrderServer;
+
+    private final AssignService assignService;
 
     @Override
-    public Date getMaxUpdateDate() {
-        Long max = shopeeOrderMapper.getMaxUpdateDate();
+    public Date getMaxUpdateDate(Integer shopId) {
+        Long max = shopeeOrderMapper.getMaxUpdateDate(shopId);
+        if (max == null){
+            return null;
+        }
         return new Date(max*1000);
     }
 
     @Override
-    public List<ShopeeOrderPO> getOrderList(ShopeeOrderDTO params) {
+    public PageResult<OrderListResponseDTO> getOrderList(ShopeeOrderRequestDTO params) {
+        PageResult<OrderListResponseDTO> result = new PageResult<>();
         QueryWrapper<ShopeeOrderPO> queryWrapper =  new QueryWrapper<>();
         if (StringUtils.isNotEmpty(params.getOrderStatus())){
             queryWrapper.lambda().eq(ShopeeOrderPO::getOrderStatus, params.getOrderStatus());
@@ -48,12 +76,35 @@ public class OrderServiceImpl  extends ServiceImpl<ShopeeOrderMapper,ShopeeOrder
         if (StringUtils.isNotEmpty(params.getOrderSn())){
             queryWrapper.lambda().eq(ShopeeOrderPO::getOrderSn, params.getOrderSn());
         }
+        if (params.getPayTimeStart() != null && params.getPayTimeEnd() != null){
+            queryWrapper.lambda().between(ShopeeOrderPO::getPayTime, params.getPayTimeStart().getTime(),params.getPayTimeEnd().getTime());
+        }
         if (params.getPageSize() > 100){
             params.setPageSize(CommonConsts.MAX_PAGE_SIZE);
         }
         IPage<ShopeeOrderPO> page = new Page<>(params.getCurrentPage(),params.getPageSize());
-        return shopeeOrderMapper.selectList(page, queryWrapper);
+        List<ShopeeOrderPO> shopeeOrderPOS = shopeeOrderMapper.selectList(page, queryWrapper);
+        List<OrderListResponseDTO> orders = new ArrayList<>();
+        shopeeOrderPOS.forEach(o ->{
+            OrderListResponseDTO d = new OrderListResponseDTO();
+            d.setOrderSn(o.getOrderSn());
+            d.setPayTime(new Date(o.getPayTime()));
+            d.setOrderTime(new Date(o.getCreateTime()));
+            d.setSite(o.getRegion());
+            ShopeeShopRequestVO shopeeShopRequestVO = new ShopeeShopRequestVO();
+            shopeeReqHandler.initCommonParam(shopeeShopRequestVO,o.getShopId().intValue(), ShopeePathConstants.GET_SHOP_INFO);
+            ShopeeResult<ShopeeShopVO> shopInfo = shopeeOrderServer.getShopInfo(shopeeShopRequestVO);
+            d.setShopName(shopInfo.getResponse().getShopName());
+            d.setTotalAmount(o.getTotalAmount());
+            d.setStatus(OrderStatusEnum.getDescByCode(o.getOrderStatus()));
+            d.setShipByDate(new Date(o.getShipByDate()));
+            List<ShopeeDetailResponseDTO> details = shopeeOrderDetailMapper.selectByOrderSn(o.getOrderSn());
+            d.setItemList(details);
+            orders.add(d);
+        });
+        result.setData(orders);
+        result.setTotalNum(page.getTotal());
+        return result;
     }
-
 
 }

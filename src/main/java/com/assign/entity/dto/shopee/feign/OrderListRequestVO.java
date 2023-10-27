@@ -1,6 +1,5 @@
-package com.assign.entity.dto.shopee.request;
+package com.assign.entity.dto.shopee.feign;
 
-import com.assign.entity.dto.shopee.request.CommonRequestDTO;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
@@ -13,7 +12,7 @@ import lombok.Data;
  * @date 2023/9/19.
  */
 @Data
-public class OrderListRequestDTO extends CommonRequestDTO {
+public class OrderListRequestVO extends CommonRequestVO {
     // 时间范围字段，可选值包括 "create_time" 和 "update_time"
 
 

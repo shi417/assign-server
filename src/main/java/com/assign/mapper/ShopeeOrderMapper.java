@@ -3,6 +3,8 @@ package com.assign.mapper;
 import com.assign.entity.po.ShopeeOrderPO;
 import org.apache.ibatis.annotations.Mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.Date;
 
 /**
@@ -28,5 +30,5 @@ public interface ShopeeOrderMapper extends BaseMapper<ShopeeOrderPO>{
 
     Date selectMaxUpdateDate();
 
-    Long getMaxUpdateDate();
+    Long getMaxUpdateDate(@Param("shopId") Integer shopId);
 }

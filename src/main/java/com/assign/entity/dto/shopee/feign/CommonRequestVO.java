@@ -1,10 +1,10 @@
-package com.assign.entity.dto.shopee.request;
+package com.assign.entity.dto.shopee.feign;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 @Data
-public class CommonRequestDTO {
+public class CommonRequestVO {
     @SerializedName("partner_id")
     private int partner_id;
     @SerializedName("timestamp")

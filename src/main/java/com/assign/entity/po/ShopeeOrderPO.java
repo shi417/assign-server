@@ -187,6 +187,8 @@ public class ShopeeOrderPO implements Serializable {
      */
     private Long updateTime;
 
+    private Long shopId;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 

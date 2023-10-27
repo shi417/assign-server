@@ -12,7 +12,7 @@ import java.util.List;
  * @author shiyaqing
  * @date 2023/9/18.
  */
-public interface ITokenService {
+public interface TokenService {
     TokensPO getTokenById(Integer shopId);
 
     List<Integer> getShopIds();

@@ -1,7 +1,8 @@
 package com.assign.util;
 
+import com.assign.entity.dto.shopee.feign.CommonRequestVO;
 import com.assign.entity.po.TokensPO;
-import com.assign.service.ITokenService;
+import com.assign.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -9,8 +10,6 @@ import org.springframework.stereotype.Component;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.math.BigInteger;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +31,7 @@ public class ShopeeReqHandler {
     private String key;
 
     @Autowired
-    private ITokenService tokenService;
+    private TokenService tokenService;
     public  Map<String, Object> getShopeeReqHeaders(Integer shopId,String path){
         Map<String,Object> headers = new HashMap<>();
         long timestamp = System.currentTimeMillis();
@@ -63,4 +62,16 @@ public class ShopeeReqHandler {
         }
         return sign;
     }
+
+
+    public void initCommonParam(CommonRequestVO dto, int shopId, String path){
+        dto.setPartner_id(partnerId);
+        TokensPO token =  tokenService.getTokenById(shopId);
+        dto.setAccess_token(token.getAccessToken());
+        dto.setShop_id(shopId);
+        long timestamp = System.currentTimeMillis()/1000;
+        dto.setTimestamp(timestamp);
+        dto.setSign(getSign(path,timestamp, token, shopId));
+    }
+
 }

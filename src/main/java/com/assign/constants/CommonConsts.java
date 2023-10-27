@@ -1,4 +1,4 @@
-package com.assign.util;
+package com.assign.constants;
 
 /**
  * CommonConsts

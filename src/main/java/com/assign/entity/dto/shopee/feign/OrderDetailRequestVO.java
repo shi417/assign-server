@@ -1,10 +1,10 @@
-package com.assign.entity.dto.shopee.request;
+package com.assign.entity.dto.shopee.feign;
 
 import com.alibaba.nacos.shaded.com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 @Data
-public class OrderDetailRequestDTO extends CommonRequestDTO{
+public class OrderDetailRequestVO extends CommonRequestVO {
     @SerializedName("order_sn_list")
     private String order_sn_list;
 

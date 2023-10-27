@@ -1,15 +1,15 @@
 
-package com.assign.entity.dto.shopee;
+package com.assign.entity.dto.shopee.feign;
 
 import java.util.List;
 
+import com.assign.entity.dto.shopee.ImageInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 @Data
-public class ShopeeItemDTO {
+public class ShopeeDetailRequireVO {
 
     @JsonProperty("add_on_deal")
     private Boolean addOnDeal;

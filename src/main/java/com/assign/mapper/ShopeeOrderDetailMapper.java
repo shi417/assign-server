@@ -1,8 +1,12 @@
 package com.assign.mapper;
 
+import com.assign.entity.dto.shopee.ShopeeDetailResponseDTO;
 import com.assign.entity.po.ShopeeOrderDetailPO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author shiyaqing
@@ -25,4 +29,5 @@ public interface ShopeeOrderDetailMapper extends BaseMapper<ShopeeOrderDetailPO>
 
     int updateByPrimaryKey(ShopeeOrderDetailPO record);
 
+    List<ShopeeDetailResponseDTO> selectByOrderSn(@Param("orderSn") String orderSn);
 }
