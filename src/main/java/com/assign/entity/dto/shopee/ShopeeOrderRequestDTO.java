@@ -1,6 +1,6 @@
 package com.assign.entity.dto.shopee;
 
-import com.assign.entity.dto.common.ConmonDTO;
+import com.assign.entity.dto.common.CommonDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -15,7 +15,7 @@ import java.util.Date;
  * @date 2023/10/26.
  */
 @Data
-public class ShopeeOrderRequestDTO extends ConmonDTO {
+public class ShopeeOrderRequestDTO extends CommonDTO {
 
     @ApiModelProperty(value = "订单号")
     private String orderSn;

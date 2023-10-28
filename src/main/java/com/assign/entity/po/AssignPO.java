@@ -22,7 +22,7 @@ public class AssignPO implements Serializable {
     private Long id;
 
     /**
-     * 0:待采购, 1:采购完成,2:已发货
+     * 0:未认领 1:待采购, 2:采购完成,3:已发货
      */
     private Integer status;
 
@@ -74,12 +74,22 @@ public class AssignPO implements Serializable {
     /**
      * 操作人
      */
-    private Integer operatorId;
+    private Long operatorId;
+
+    /**
+     * 操作人
+     */
+    private String operatorName;
 
     /**
      * 执行人
      */
-    private Integer executorId;
+    private Long executorId;
+
+    /**
+     * 执行人
+     */
+    private String executorName;
 
     /**
      * 创建时间

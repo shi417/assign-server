@@ -20,7 +20,7 @@ import java.util.Map;
  * @date 2023/9/12.
  */
 @FeignClient(name = "shopeeOrderServer", url = "${shopee.url}")
-public interface ShopeeOrderServer {
+public interface ShopeeOrderFeignServer {
 
 
     @GetMapping(value = ShopeePathConstants.GET_ORDER_LIST , headers = {"content-type=application/json", "userAgent=PC"}, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -30,7 +30,7 @@ public interface ShopeeOrderServer {
     ShopeeResult<Map<String,List<ShopeeOrderRequireDTO>>> fetchOrderDetail(@SpringQueryMap OrderDetailRequestVO reqParams);
 
     @GetMapping(value = ShopeePathConstants.GET_SHOP_INFO , headers = {"content-type=application/json", "userAgent=PC"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    ShopeeResult<ShopeeShopVO> getShopInfo(@SpringQueryMap ShopeeShopRequestVO reqParams);
+    ShopeeShopVO getShopInfo(@SpringQueryMap ShopeeShopRequestVO reqParams);
 
 //    @PostMapping(value = "/api/v2/public/get_shops_by_partner")
 //    Object fetchShopList(@RequestHeader Map<String, String> headerMap,@RequestParam Map<String, String> reqParams,@RequestBody OrderReqBodyDTO reqBody);

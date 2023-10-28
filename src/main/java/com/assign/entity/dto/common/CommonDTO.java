@@ -11,7 +11,7 @@ import lombok.Data;
  * @date 2023/10/7.
  */
 @Data
-public class ConmonDTO {
+public class CommonDTO {
 
     /**
      *页面大小

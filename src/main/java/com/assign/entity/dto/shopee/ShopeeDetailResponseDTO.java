@@ -1,5 +1,6 @@
 package com.assign.entity.dto.shopee;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -15,14 +16,22 @@ import java.math.BigDecimal;
 @Data
 public class ShopeeDetailResponseDTO {
 
+    @ApiModelProperty(value = "sku")
     private String skuDes;
 
+    @ApiModelProperty(value = "类型")
     private String type;
 
+    @ApiModelProperty(value = "认领人")
     private String assignUser;
 
+    @ApiModelProperty(value = "认领状态 0:未认领 1:待采购, 2:采购完成,3:已发货")
     private String assignStatus;
 
+    @ApiModelProperty(value = "折扣价")
     private BigDecimal modelDiscountedPrice;
+
+    @ApiModelProperty(value = "原价")
+    private BigDecimal modelOriginalPrice;
 
 }

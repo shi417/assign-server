@@ -38,6 +38,9 @@ public class OrderListResponseDTO {
 
     @ApiModelProperty(value = "截止日期")
     private Date shipByDate;
+
+    @ApiModelProperty(value = "币别")
+    private String currency;
     @JsonProperty("order_list")
     private List<ShopeeDetailResponseDTO> itemList;
 

@@ -1,17 +1,17 @@
 package com.assign.task;
 
+import cn.hutool.core.convert.Convert;
 import com.assign.common.mdoel.ShopeeResult;
 import com.assign.constants.ShopeePathConstants;
 import com.assign.entity.dto.shopee.ShopeeOrderDetailDTO;
 import com.assign.entity.dto.shopee.feign.*;
 import com.assign.entity.po.ShopeeOrderDetailPO;
 import com.assign.entity.po.ShopeeOrderPO;
-import com.assign.feign.ShopeeOrderServer;
+import com.assign.feign.ShopeeOrderFeignServer;
 import com.assign.service.OrderDetailService;
 import com.assign.service.OrderService;
 import com.assign.service.TokenService;
 import com.assign.util.ShopeeReqHandler;
-import io.swagger.models.auth.In;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderTask {
 
-    private final ShopeeOrderServer shopeeOrderServer;
+    private final ShopeeOrderFeignServer shopeeOrderServer;
 
     private final TokenService tokenService;
 
@@ -127,7 +127,7 @@ public class OrderTask {
                     .collect(Collectors.joining(","));
             OrderDetailRequestVO detailRequestDTO = genDetailRequestParam(shopId);
             detailRequestDTO.setOrder_sn_list(sns);
-            detailRequestDTO.setResponse_optional_fields("item_list,pay_time,create_time,total_amount,buyer_cancel_reason,buyer_user_id,buyer_username,cancel_reason,cancelBy");
+            detailRequestDTO.setResponse_optional_fields("item_list,pay_time,create_time,total_amount,buyer_cancel_reason,buyer_user_id,buyer_username,cancel_reason,cancelBy,model_discounted_price,model_original_price");
             ShopeeResult<Map<String,List<ShopeeOrderRequireDTO>>> detailResult = shopeeOrderServer.fetchOrderDetail(detailRequestDTO);
             if (detailResult.getResponse() != null){
                 res.addAll(detailResult.getResponse().get("order_list"));
@@ -158,10 +158,11 @@ public class OrderTask {
         orderService.saveOrUpdateBatch(pos);
         List<ShopeeOrderDetailPO> details = new ArrayList<>();
         for (ShopeeOrderDetailDTO detailDTO : detailList){
-            ShopeeOrderDetailPO po = new ShopeeOrderDetailPO();
-            BeanUtils.copyProperties(detailDTO,po);
+            ShopeeOrderDetailPO po = Convert.convert(ShopeeOrderDetailPO.class,detailDTO);
             details.add(po);
+
         }
+        log.info("更新明细:{}",details.size());
         orderDetailService.saveOrUpdateBatch(details);
     }
 

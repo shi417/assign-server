@@ -1,6 +1,9 @@
 package com.assign.mapper;
 
 import com.assign.entity.po.AssignPO;
+import com.assign.entity.po.ShopeeOrderPO;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
 * @author shiyaqing
@@ -8,7 +11,8 @@ import com.assign.entity.po.AssignPO;
 * @createDate 2023-10-27 15:58:20
 * @Entity generator.domain.Assign
 */
-public interface AssignMapper {
+@Mapper
+public interface AssignMapper extends BaseMapper<AssignPO> {
 
     int deleteByPrimaryKey(Long id);
 

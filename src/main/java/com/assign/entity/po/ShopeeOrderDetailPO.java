@@ -1,5 +1,6 @@
 package com.assign.entity.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -18,8 +19,8 @@ public class ShopeeOrderDetailPO implements Serializable {
     /**
      *
      */
-    @TableId
-    private Long itemId;
+    @TableId(type = IdType.AUTO)
+    private Long id;
 
     /**
      * 指示此商品是否属于附加套餐的
@@ -30,6 +31,11 @@ public class ShopeeOrderDetailPO implements Serializable {
      * 用于区分购物车和订单中商品组的唯一标识符，例如 AddOnDeal。
      */
     private Integer addOnDealId;
+
+    /**
+     *
+     */
+    private Long itemId;
 
     /**
      *
@@ -118,5 +124,4 @@ public class ShopeeOrderDetailPO implements Serializable {
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
-
 }

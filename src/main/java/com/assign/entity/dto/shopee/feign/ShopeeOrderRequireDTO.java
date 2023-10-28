@@ -1,9 +1,10 @@
 
 package com.assign.entity.dto.shopee.feign;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-import com.assign.entity.dto.common.ConmonDTO;
+import com.assign.entity.dto.common.CommonDTO;
 import com.assign.entity.dto.shopee.PackageList;
 import com.assign.entity.dto.shopee.RecipientAddress;
 import com.assign.entity.dto.shopee.ShopeeOrderDetailDTO;
@@ -12,7 +13,7 @@ import com.google.gson.annotations.Expose;
 import lombok.Data;
 import io.swagger.annotations.ApiModelProperty;
 @Data
-public class ShopeeOrderRequireDTO extends ConmonDTO {
+public class ShopeeOrderRequireDTO extends CommonDTO {
 
     @JsonProperty("actual_shipping_fee")
     @ApiModelProperty(value = "订单的实际运费（如果有的话）来自外部物流合作伙伴")
@@ -170,5 +171,8 @@ public class ShopeeOrderRequireDTO extends ConmonDTO {
     @ApiModelProperty(value = "更新时间")
     @JsonProperty("update_time")
     private Long updateTime;
+
+    @JsonProperty("model_discounted_price")
+    private BigDecimal modelDiscountedPrice;
 
 }

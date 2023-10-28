@@ -9,9 +9,8 @@ import com.assign.entity.dto.shopee.ShopeeDetailResponseDTO;
 import com.assign.entity.dto.shopee.ShopeeOrderRequestDTO;
 import com.assign.entity.dto.shopee.feign.ShopeeShopRequestVO;
 import com.assign.entity.dto.shopee.feign.ShopeeShopVO;
-import com.assign.entity.po.ShopeeOrderDetailPO;
 import com.assign.entity.po.ShopeeOrderPO;
-import com.assign.feign.ShopeeOrderServer;
+import com.assign.feign.ShopeeOrderFeignServer;
 import com.assign.mapper.ShopeeOrderDetailMapper;
 import com.assign.mapper.ShopeeOrderMapper;
 import com.assign.service.AssignService;
@@ -25,7 +24,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -53,7 +51,7 @@ public class OrderServiceImpl  extends ServiceImpl<ShopeeOrderMapper,ShopeeOrder
 
     private final ShopeeReqHandler shopeeReqHandler;
 
-    private  final ShopeeOrderServer shopeeOrderServer;
+    private  final ShopeeOrderFeignServer shopeeOrderFeignServer;
 
     private final AssignService assignService;
 
@@ -82,22 +80,24 @@ public class OrderServiceImpl  extends ServiceImpl<ShopeeOrderMapper,ShopeeOrder
         if (params.getPageSize() > 100){
             params.setPageSize(CommonConsts.MAX_PAGE_SIZE);
         }
-        IPage<ShopeeOrderPO> page = new Page<>(params.getCurrentPage(),params.getPageSize());
-        List<ShopeeOrderPO> shopeeOrderPOS = shopeeOrderMapper.selectList(page, queryWrapper);
+        Page<ShopeeOrderPO> page = new Page<>(params.getCurrentPage(),params.getPageSize());
+        IPage<ShopeeOrderPO> pageRes = shopeeOrderMapper.selectPage(page,queryWrapper);
+        List<ShopeeOrderPO> shopeeOrderPOS = pageRes.getRecords();
         List<OrderListResponseDTO> orders = new ArrayList<>();
         shopeeOrderPOS.forEach(o ->{
             OrderListResponseDTO d = new OrderListResponseDTO();
             d.setOrderSn(o.getOrderSn());
-            d.setPayTime(new Date(o.getPayTime()));
+            d.setPayTime(o.getPayTime() == null ? null:new Date(o.getPayTime()));
             d.setOrderTime(new Date(o.getCreateTime()));
             d.setSite(o.getRegion());
+            d.setCurrency(o.getCurrency());
             ShopeeShopRequestVO shopeeShopRequestVO = new ShopeeShopRequestVO();
             shopeeReqHandler.initCommonParam(shopeeShopRequestVO,o.getShopId().intValue(), ShopeePathConstants.GET_SHOP_INFO);
-            ShopeeResult<ShopeeShopVO> shopInfo = shopeeOrderServer.getShopInfo(shopeeShopRequestVO);
-            d.setShopName(shopInfo.getResponse().getShopName());
+            ShopeeShopVO shopInfo = shopeeOrderFeignServer.getShopInfo(shopeeShopRequestVO);
+            d.setShopName(shopInfo.getShopName());
             d.setTotalAmount(o.getTotalAmount());
             d.setStatus(OrderStatusEnum.getDescByCode(o.getOrderStatus()));
-            d.setShipByDate(new Date(o.getShipByDate()));
+            d.setShipByDate(o.getShipByDate() == null ? null :new Date(o.getShipByDate()));
             List<ShopeeDetailResponseDTO> details = shopeeOrderDetailMapper.selectByOrderSn(o.getOrderSn());
             d.setItemList(details);
             orders.add(d);

@@ -5,22 +5,24 @@
 <mapper namespace="com.assign.mapper.AssignMapper">
 
     <resultMap id="BaseResultMap" type="com.assign.entity.po.AssignPO">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="status" column="status" jdbcType="TINYINT"/>
-            <result property="ecOrderNo" column="ec_order_no" jdbcType="VARCHAR"/>
-            <result property="ecProductId" column="ec_product_id" jdbcType="VARCHAR"/>
-            <result property="ecItemId" column="ec_item_id" jdbcType="BIGINT"/>
-            <result property="ecItemName" column="ec_item_name" jdbcType="VARCHAR"/>
-            <result property="buyOrderNo" column="buy_order_no" jdbcType="VARCHAR"/>
-            <result property="buyUrl" column="buy_url" jdbcType="VARCHAR"/>
-            <result property="price" column="price" jdbcType="DECIMAL"/>
-            <result property="agencyPrice" column="agency_price" jdbcType="DECIMAL"/>
-            <result property="type" column="type" jdbcType="TINYINT"/>
-            <result property="operatorId" column="operator_id" jdbcType="TINYINT"/>
-            <result property="executorId" column="executor_id" jdbcType="TINYINT"/>
-            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
-            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
-            <result property="deletedAt" column="deleted_at" jdbcType="TIMESTAMP"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="ecOrderNo" column="ec_order_no" jdbcType="VARCHAR"/>
+        <result property="ecProductId" column="ec_product_id" jdbcType="VARCHAR"/>
+        <result property="ecItemId" column="ec_item_id" jdbcType="BIGINT"/>
+        <result property="ecItemName" column="ec_item_name" jdbcType="VARCHAR"/>
+        <result property="buyOrderNo" column="buy_order_no" jdbcType="VARCHAR"/>
+        <result property="buyUrl" column="buy_url" jdbcType="VARCHAR"/>
+        <result property="price" column="price" jdbcType="DECIMAL"/>
+        <result property="agencyPrice" column="agency_price" jdbcType="DECIMAL"/>
+        <result property="type" column="type" jdbcType="TINYINT"/>
+        <result property="operatorId" column="operator_id" jdbcType="BIGINT"/>
+        <result property="operatorName" column="operator_name" jdbcType="VARCHAR"/>
+        <result property="executorId" column="executor_id" jdbcType="BIGINT"/>
+        <result property="executorName" column="executor_name" jdbcType="VARCHAR"/>
+        <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+        <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+        <result property="deletedAt" column="deleted_at" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -28,8 +30,8 @@
         ec_product_id,ec_item_id,ec_item_name,
         buy_order_no,buy_url,price,
         agency_price,type,operator_id,
-        executor_id,created_at,updated_at,
-        deleted_at
+        operator_name,executor_id,executor_name,
+        created_at,updated_at,deleted_at
     </sql>
 
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -49,108 +51,120 @@
         ,ec_product_id,ec_item_id,ec_item_name
         ,buy_order_no,buy_url,price
         ,agency_price,type,operator_id
-        ,executor_id,created_at,updated_at
-        ,deleted_at)
+        ,operator_name,executor_id,executor_name
+        ,created_at,updated_at,deleted_at
+        )
         values (#{id,jdbcType=BIGINT},#{status,jdbcType=TINYINT},#{ecOrderNo,jdbcType=VARCHAR}
-        ,#{ecProductId,jdbcType=VARCHAR},#{ecItemId,jdbcType=BIGINT},#{ecItemName,jdbcType=VARCHAR}
-        ,#{buyOrderNo,jdbcType=VARCHAR},#{buyUrl,jdbcType=VARCHAR},#{price,jdbcType=DECIMAL}
-        ,#{agencyPrice,jdbcType=DECIMAL},#{type,jdbcType=TINYINT},#{operatorId,jdbcType=TINYINT}
-        ,#{executorId,jdbcType=TINYINT},#{createdAt,jdbcType=TIMESTAMP},#{updatedAt,jdbcType=TIMESTAMP}
-        ,#{deletedAt,jdbcType=TIMESTAMP})
+               ,#{ecProductId,jdbcType=VARCHAR},#{ecItemId,jdbcType=BIGINT},#{ecItemName,jdbcType=VARCHAR}
+               ,#{buyOrderNo,jdbcType=VARCHAR},#{buyUrl,jdbcType=VARCHAR},#{price,jdbcType=DECIMAL}
+               ,#{agencyPrice,jdbcType=DECIMAL},#{type,jdbcType=TINYINT},#{operatorId,jdbcType=BIGINT}
+               ,#{operatorName,jdbcType=VARCHAR},#{executorId,jdbcType=BIGINT},#{executorName,jdbcType=VARCHAR}
+               ,#{createdAt,jdbcType=TIMESTAMP},#{updatedAt,jdbcType=TIMESTAMP},#{deletedAt,jdbcType=TIMESTAMP}
+               )
     </insert>
     <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.assign.entity.po.AssignPO" useGeneratedKeys="true">
         insert into assign
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="id != null">id,</if>
-                <if test="status != null">status,</if>
-                <if test="ecOrderNo != null">ec_order_no,</if>
-                <if test="ecProductId != null">ec_product_id,</if>
-                <if test="ecItemId != null">ec_item_id,</if>
-                <if test="ecItemName != null">ec_item_name,</if>
-                <if test="buyOrderNo != null">buy_order_no,</if>
-                <if test="buyUrl != null">buy_url,</if>
-                <if test="price != null">price,</if>
-                <if test="agencyPrice != null">agency_price,</if>
-                <if test="type != null">type,</if>
-                <if test="operatorId != null">operator_id,</if>
-                <if test="executorId != null">executor_id,</if>
-                <if test="createdAt != null">created_at,</if>
-                <if test="updatedAt != null">updated_at,</if>
-                <if test="deletedAt != null">deleted_at,</if>
+            <if test="id != null">id,</if>
+            <if test="status != null">status,</if>
+            <if test="ecOrderNo != null">ec_order_no,</if>
+            <if test="ecProductId != null">ec_product_id,</if>
+            <if test="ecItemId != null">ec_item_id,</if>
+            <if test="ecItemName != null">ec_item_name,</if>
+            <if test="buyOrderNo != null">buy_order_no,</if>
+            <if test="buyUrl != null">buy_url,</if>
+            <if test="price != null">price,</if>
+            <if test="agencyPrice != null">agency_price,</if>
+            <if test="type != null">type,</if>
+            <if test="operatorId != null">operator_id,</if>
+            <if test="operatorName != null">operator_name,</if>
+            <if test="executorId != null">executor_id,</if>
+            <if test="executorName != null">executor_name,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+            <if test="deletedAt != null">deleted_at,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                <if test="id != null">#{id,jdbcType=BIGINT},</if>
-                <if test="status != null">#{status,jdbcType=TINYINT},</if>
-                <if test="ecOrderNo != null">#{ecOrderNo,jdbcType=VARCHAR},</if>
-                <if test="ecProductId != null">#{ecProductId,jdbcType=VARCHAR},</if>
-                <if test="ecItemId != null">#{ecItemId,jdbcType=BIGINT},</if>
-                <if test="ecItemName != null">#{ecItemName,jdbcType=VARCHAR},</if>
-                <if test="buyOrderNo != null">#{buyOrderNo,jdbcType=VARCHAR},</if>
-                <if test="buyUrl != null">#{buyUrl,jdbcType=VARCHAR},</if>
-                <if test="price != null">#{price,jdbcType=DECIMAL},</if>
-                <if test="agencyPrice != null">#{agencyPrice,jdbcType=DECIMAL},</if>
-                <if test="type != null">#{type,jdbcType=TINYINT},</if>
-                <if test="operatorId != null">#{operatorId,jdbcType=TINYINT},</if>
-                <if test="executorId != null">#{executorId,jdbcType=TINYINT},</if>
-                <if test="createdAt != null">#{createdAt,jdbcType=TIMESTAMP},</if>
-                <if test="updatedAt != null">#{updatedAt,jdbcType=TIMESTAMP},</if>
-                <if test="deletedAt != null">#{deletedAt,jdbcType=TIMESTAMP},</if>
+            <if test="id != null">#{id,jdbcType=BIGINT},</if>
+            <if test="status != null">#{status,jdbcType=TINYINT},</if>
+            <if test="ecOrderNo != null">#{ecOrderNo,jdbcType=VARCHAR},</if>
+            <if test="ecProductId != null">#{ecProductId,jdbcType=VARCHAR},</if>
+            <if test="ecItemId != null">#{ecItemId,jdbcType=BIGINT},</if>
+            <if test="ecItemName != null">#{ecItemName,jdbcType=VARCHAR},</if>
+            <if test="buyOrderNo != null">#{buyOrderNo,jdbcType=VARCHAR},</if>
+            <if test="buyUrl != null">#{buyUrl,jdbcType=VARCHAR},</if>
+            <if test="price != null">#{price,jdbcType=DECIMAL},</if>
+            <if test="agencyPrice != null">#{agencyPrice,jdbcType=DECIMAL},</if>
+            <if test="type != null">#{type,jdbcType=TINYINT},</if>
+            <if test="operatorId != null">#{operatorId,jdbcType=BIGINT},</if>
+            <if test="operatorName != null">#{operatorName,jdbcType=VARCHAR},</if>
+            <if test="executorId != null">#{executorId,jdbcType=BIGINT},</if>
+            <if test="executorName != null">#{executorName,jdbcType=VARCHAR},</if>
+            <if test="createdAt != null">#{createdAt,jdbcType=TIMESTAMP},</if>
+            <if test="updatedAt != null">#{updatedAt,jdbcType=TIMESTAMP},</if>
+            <if test="deletedAt != null">#{deletedAt,jdbcType=TIMESTAMP},</if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.assign.entity.po.AssignPO">
         update assign
         <set>
-                <if test="status != null">
-                    status = #{status,jdbcType=TINYINT},
-                </if>
-                <if test="ecOrderNo != null">
-                    ec_order_no = #{ecOrderNo,jdbcType=VARCHAR},
-                </if>
-                <if test="ecProductId != null">
-                    ec_product_id = #{ecProductId,jdbcType=VARCHAR},
-                </if>
-                <if test="ecItemId != null">
-                    ec_item_id = #{ecItemId,jdbcType=BIGINT},
-                </if>
-                <if test="ecItemName != null">
-                    ec_item_name = #{ecItemName,jdbcType=VARCHAR},
-                </if>
-                <if test="buyOrderNo != null">
-                    buy_order_no = #{buyOrderNo,jdbcType=VARCHAR},
-                </if>
-                <if test="buyUrl != null">
-                    buy_url = #{buyUrl,jdbcType=VARCHAR},
-                </if>
-                <if test="price != null">
-                    price = #{price,jdbcType=DECIMAL},
-                </if>
-                <if test="agencyPrice != null">
-                    agency_price = #{agencyPrice,jdbcType=DECIMAL},
-                </if>
-                <if test="type != null">
-                    type = #{type,jdbcType=TINYINT},
-                </if>
-                <if test="operatorId != null">
-                    operator_id = #{operatorId,jdbcType=TINYINT},
-                </if>
-                <if test="executorId != null">
-                    executor_id = #{executorId,jdbcType=TINYINT},
-                </if>
-                <if test="createdAt != null">
-                    created_at = #{createdAt,jdbcType=TIMESTAMP},
-                </if>
-                <if test="updatedAt != null">
-                    updated_at = #{updatedAt,jdbcType=TIMESTAMP},
-                </if>
-                <if test="deletedAt != null">
-                    deleted_at = #{deletedAt,jdbcType=TIMESTAMP},
-                </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="ecOrderNo != null">
+                ec_order_no = #{ecOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="ecProductId != null">
+                ec_product_id = #{ecProductId,jdbcType=VARCHAR},
+            </if>
+            <if test="ecItemId != null">
+                ec_item_id = #{ecItemId,jdbcType=BIGINT},
+            </if>
+            <if test="ecItemName != null">
+                ec_item_name = #{ecItemName,jdbcType=VARCHAR},
+            </if>
+            <if test="buyOrderNo != null">
+                buy_order_no = #{buyOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="buyUrl != null">
+                buy_url = #{buyUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="agencyPrice != null">
+                agency_price = #{agencyPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="operatorId != null">
+                operator_id = #{operatorId,jdbcType=BIGINT},
+            </if>
+            <if test="operatorName != null">
+                operator_name = #{operatorName,jdbcType=VARCHAR},
+            </if>
+            <if test="executorId != null">
+                executor_id = #{executorId,jdbcType=BIGINT},
+            </if>
+            <if test="executorName != null">
+                executor_name = #{executorName,jdbcType=VARCHAR},
+            </if>
+            <if test="createdAt != null">
+                created_at = #{createdAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updatedAt != null">
+                updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="deletedAt != null">
+                deleted_at = #{deletedAt,jdbcType=TIMESTAMP},
+            </if>
         </set>
-        where   id = #{id,jdbcType=BIGINT} 
+        where   id = #{id,jdbcType=BIGINT}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.assign.entity.po.AssignPO">
         update assign
-        set 
+        set
             status =  #{status,jdbcType=TINYINT},
             ec_order_no =  #{ecOrderNo,jdbcType=VARCHAR},
             ec_product_id =  #{ecProductId,jdbcType=VARCHAR},
@@ -161,11 +175,13 @@
             price =  #{price,jdbcType=DECIMAL},
             agency_price =  #{agencyPrice,jdbcType=DECIMAL},
             type =  #{type,jdbcType=TINYINT},
-            operator_id =  #{operatorId,jdbcType=TINYINT},
-            executor_id =  #{executorId,jdbcType=TINYINT},
+            operator_id =  #{operatorId,jdbcType=BIGINT},
+            operator_name =  #{operatorName,jdbcType=VARCHAR},
+            executor_id =  #{executorId,jdbcType=BIGINT},
+            executor_name =  #{executorName,jdbcType=VARCHAR},
             created_at =  #{createdAt,jdbcType=TIMESTAMP},
             updated_at =  #{updatedAt,jdbcType=TIMESTAMP},
             deleted_at =  #{deletedAt,jdbcType=TIMESTAMP}
-        where   id = #{id,jdbcType=BIGINT} 
+        where   id = #{id,jdbcType=BIGINT}
     </update>
 </mapper>
