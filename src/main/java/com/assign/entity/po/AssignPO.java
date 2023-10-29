@@ -106,86 +106,11 @@ public class AssignPO implements Serializable {
      */
     private Date deletedAt;
 
+    private Integer source;
+
+    private Integer quality;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
-    @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        AssignPO other = (AssignPO) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-            && (this.getEcOrderNo() == null ? other.getEcOrderNo() == null : this.getEcOrderNo().equals(other.getEcOrderNo()))
-            && (this.getEcProductId() == null ? other.getEcProductId() == null : this.getEcProductId().equals(other.getEcProductId()))
-            && (this.getEcItemId() == null ? other.getEcItemId() == null : this.getEcItemId().equals(other.getEcItemId()))
-            && (this.getEcItemName() == null ? other.getEcItemName() == null : this.getEcItemName().equals(other.getEcItemName()))
-            && (this.getBuyOrderNo() == null ? other.getBuyOrderNo() == null : this.getBuyOrderNo().equals(other.getBuyOrderNo()))
-            && (this.getBuyUrl() == null ? other.getBuyUrl() == null : this.getBuyUrl().equals(other.getBuyUrl()))
-            && (this.getPrice() == null ? other.getPrice() == null : this.getPrice().equals(other.getPrice()))
-            && (this.getAgencyPrice() == null ? other.getAgencyPrice() == null : this.getAgencyPrice().equals(other.getAgencyPrice()))
-            && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
-            && (this.getOperatorId() == null ? other.getOperatorId() == null : this.getOperatorId().equals(other.getOperatorId()))
-            && (this.getExecutorId() == null ? other.getExecutorId() == null : this.getExecutorId().equals(other.getExecutorId()))
-            && (this.getCreatedAt() == null ? other.getCreatedAt() == null : this.getCreatedAt().equals(other.getCreatedAt()))
-            && (this.getUpdatedAt() == null ? other.getUpdatedAt() == null : this.getUpdatedAt().equals(other.getUpdatedAt()))
-            && (this.getDeletedAt() == null ? other.getDeletedAt() == null : this.getDeletedAt().equals(other.getDeletedAt()));
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
-        result = prime * result + ((getEcOrderNo() == null) ? 0 : getEcOrderNo().hashCode());
-        result = prime * result + ((getEcProductId() == null) ? 0 : getEcProductId().hashCode());
-        result = prime * result + ((getEcItemId() == null) ? 0 : getEcItemId().hashCode());
-        result = prime * result + ((getEcItemName() == null) ? 0 : getEcItemName().hashCode());
-        result = prime * result + ((getBuyOrderNo() == null) ? 0 : getBuyOrderNo().hashCode());
-        result = prime * result + ((getBuyUrl() == null) ? 0 : getBuyUrl().hashCode());
-        result = prime * result + ((getPrice() == null) ? 0 : getPrice().hashCode());
-        result = prime * result + ((getAgencyPrice() == null) ? 0 : getAgencyPrice().hashCode());
-        result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
-        result = prime * result + ((getOperatorId() == null) ? 0 : getOperatorId().hashCode());
-        result = prime * result + ((getExecutorId() == null) ? 0 : getExecutorId().hashCode());
-        result = prime * result + ((getCreatedAt() == null) ? 0 : getCreatedAt().hashCode());
-        result = prime * result + ((getUpdatedAt() == null) ? 0 : getUpdatedAt().hashCode());
-        result = prime * result + ((getDeletedAt() == null) ? 0 : getDeletedAt().hashCode());
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", status=").append(status);
-        sb.append(", ecOrderNo=").append(ecOrderNo);
-        sb.append(", ecProductId=").append(ecProductId);
-        sb.append(", ecItemId=").append(ecItemId);
-        sb.append(", ecItemName=").append(ecItemName);
-        sb.append(", buyOrderNo=").append(buyOrderNo);
-        sb.append(", buyUrl=").append(buyUrl);
-        sb.append(", price=").append(price);
-        sb.append(", agencyPrice=").append(agencyPrice);
-        sb.append(", type=").append(type);
-        sb.append(", operatorId=").append(operatorId);
-        sb.append(", executorId=").append(executorId);
-        sb.append(", createdAt=").append(createdAt);
-        sb.append(", updatedAt=").append(updatedAt);
-        sb.append(", deletedAt=").append(deletedAt);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
-    }
 }

@@ -71,5 +71,8 @@ public class AssignRequestDTO extends CommonDTO {
 
     private Date createdAtEnd;
 
+    @ApiModelProperty("货源 0 pdd 1 淘宝 2 1688 3 其他")
+    private Integer source;
+
 
 }

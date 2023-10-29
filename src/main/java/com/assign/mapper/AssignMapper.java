@@ -4,6 +4,7 @@ import com.assign.entity.po.AssignPO;
 import com.assign.entity.po.ShopeeOrderPO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
 * @author shiyaqing
@@ -26,4 +27,5 @@ public interface AssignMapper extends BaseMapper<AssignPO> {
 
     int updateByPrimaryKey(AssignPO record);
 
+    AssignPO selectByItemId(@Param("itemId") Long ecItemId);
 }

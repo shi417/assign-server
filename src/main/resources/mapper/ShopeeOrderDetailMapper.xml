@@ -42,7 +42,7 @@
         select
         <include refid="Base_Column_List" />
         from shopee_order_detail
-        where  item_id = #{itemId,jdbcType=BIGINT} 
+        where  id = #{id,jdbcType=BIGINT}
     </select>
     <select id="selectByOrderSn" resultType="com.assign.entity.dto.shopee.ShopeeDetailResponseDTO">
         select d.item_name              as skuDes,
@@ -50,11 +50,19 @@
                item_sku                 as type,
                a.status                 as assignStatus,
                d.model_discounted_price as modelDiscountedPrice,
-               d.model_original_price   as modelOriginalPrice
+               d.model_original_price   as modelOriginalPrice,
+               d.item_id                as itemId,
+               d.id                     as id
         from shopee_order_detail d
         left join assign a on a.ec_item_id = d.item_id
         left join staff s on a.executor_id = s.id
         where order_sn = #{orderSn}
+    </select>
+    <select id="selectByItemId" resultType="com.assign.entity.po.ShopeeOrderDetailPO">
+        select
+        <include refid="Base_Column_List" />
+        from shopee_order_detail
+        where  item_id = #{itemId,jdbcType=BIGINT} and order_sn =  #{orderNo,jdbcType=VARCHAR}
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">

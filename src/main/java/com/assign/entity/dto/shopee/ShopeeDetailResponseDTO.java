@@ -34,4 +34,10 @@ public class ShopeeDetailResponseDTO {
     @ApiModelProperty(value = "原价")
     private BigDecimal modelOriginalPrice;
 
+    @ApiModelProperty(value = "商品唯一识别码")
+    private Long itemId;
+
+    @ApiModelProperty(value = "商品id")
+    private Long id;
+
 }

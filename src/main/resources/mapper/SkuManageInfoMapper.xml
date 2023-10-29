@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.assign.mapper.SkuManageInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.assign.entity.po.SkuManageInfoPO">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="introduction" column="introduction" jdbcType="VARCHAR"/>
+        <result property="skuDesc" column="sku_desc" jdbcType="VARCHAR"/>
+        <result property="price" column="price" jdbcType="DECIMAL"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="source" column="source" jdbcType="TINYINT"/>
+        <result property="url" column="url" jdbcType="VARCHAR"/>
+        <result property="isBase" column="isBase" jdbcType="TINYINT"/>
+        <result property="createAt" column="create_at" jdbcType="TIMESTAMP"/>
+        <result property="updateAt" column="update_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,introduction,sku_desc,
+        price,content,source,
+        url,isBase,create_at,
+        update_at
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from sku_manage_info
+        where  id = #{id,jdbcType=BIGINT} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from sku_manage_info
+        where  id = #{id,jdbcType=BIGINT} 
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.assign.entity.po.SkuManageInfoPO" useGeneratedKeys="true">
+        insert into sku_manage_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="introduction != null">introduction,</if>
+            <if test="skuDesc != null">sku_desc,</if>
+            <if test="price != null">price,</if>
+            <if test="content != null">content,</if>
+            <if test="source != null">source,</if>
+            <if test="url != null">url,</if>
+            <if test="isbase != null">isBase,</if>
+            <if test="createAt != null">create_at,</if>
+            <if test="updateAt != null">update_at,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=BIGINT},</if>
+            <if test="introduction != null">#{introduction,jdbcType=VARCHAR},</if>
+            <if test="skuDesc != null">#{skuDesc,jdbcType=VARCHAR},</if>
+            <if test="price != null">#{price,jdbcType=DECIMAL},</if>
+            <if test="content != null">#{content,jdbcType=VARCHAR},</if>
+            <if test="source != null">#{source,jdbcType=TINYINT},</if>
+            <if test="url != null">#{url,jdbcType=VARCHAR},</if>
+            <if test="isbase != null">#{isbase,jdbcType=TINYINT},</if>
+            <if test="createAt != null">#{createAt,jdbcType=TIMESTAMP},</if>
+            <if test="updateAt != null">#{updateAt,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.assign.entity.po.SkuManageInfoPO" useGeneratedKeys="true">
+        insert into sku_manage_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="introduction != null">introduction,</if>
+            <if test="skuDesc != null">sku_desc,</if>
+            <if test="price != null">price,</if>
+            <if test="content != null">content,</if>
+            <if test="source != null">source,</if>
+            <if test="url != null">url,</if>
+            <if test="isbase != null">isBase,</if>
+            <if test="createAt != null">create_at,</if>
+            <if test="updateAt != null">update_at,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=BIGINT},</if>
+            <if test="introduction != null">#{introduction,jdbcType=VARCHAR},</if>
+            <if test="skuDesc != null">#{skuDesc,jdbcType=VARCHAR},</if>
+            <if test="price != null">#{price,jdbcType=DECIMAL},</if>
+            <if test="content != null">#{content,jdbcType=VARCHAR},</if>
+            <if test="source != null">#{source,jdbcType=TINYINT},</if>
+            <if test="url != null">#{url,jdbcType=VARCHAR},</if>
+            <if test="isbase != null">#{isbase,jdbcType=TINYINT},</if>
+            <if test="createAt != null">#{createAt,jdbcType=TIMESTAMP},</if>
+            <if test="updateAt != null">#{updateAt,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.assign.entity.po.SkuManageInfoPO">
+        update sku_manage_info
+        <set>
+            <if test="introduction != null">
+                introduction = #{introduction,jdbcType=VARCHAR},
+            </if>
+            <if test="skuDesc != null">
+                sku_desc = #{skuDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="source != null">
+                source = #{source,jdbcType=TINYINT},
+            </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="isbase != null">
+                isBase = #{isbase,jdbcType=TINYINT},
+            </if>
+            <if test="createAt != null">
+                create_at = #{createAt,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateAt != null">
+                update_at = #{updateAt,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where   id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.assign.entity.po.SkuManageInfoPO">
+        update sku_manage_info
+        set
+            introduction =  #{introduction,jdbcType=VARCHAR},
+            sku_desc =  #{skuDesc,jdbcType=VARCHAR},
+            price =  #{price,jdbcType=DECIMAL},
+            content =  #{content,jdbcType=VARCHAR},
+            source =  #{source,jdbcType=TINYINT},
+            url =  #{url,jdbcType=VARCHAR},
+            isBase =  #{isbase,jdbcType=TINYINT},
+            create_at =  #{createAt,jdbcType=TIMESTAMP},
+            update_at =  #{updateAt,jdbcType=TIMESTAMP}
+        where   id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

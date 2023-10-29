@@ -14,12 +14,14 @@
         <result property="buyOrderNo" column="buy_order_no" jdbcType="VARCHAR"/>
         <result property="buyUrl" column="buy_url" jdbcType="VARCHAR"/>
         <result property="price" column="price" jdbcType="DECIMAL"/>
+        <result property="quality" column="quality" jdbcType="INTEGER"/>
         <result property="agencyPrice" column="agency_price" jdbcType="DECIMAL"/>
         <result property="type" column="type" jdbcType="TINYINT"/>
         <result property="operatorId" column="operator_id" jdbcType="BIGINT"/>
         <result property="operatorName" column="operator_name" jdbcType="VARCHAR"/>
         <result property="executorId" column="executor_id" jdbcType="BIGINT"/>
         <result property="executorName" column="executor_name" jdbcType="VARCHAR"/>
+        <result property="source" column="source" jdbcType="TINYINT"/>
         <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
         <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
         <result property="deletedAt" column="deleted_at" jdbcType="TIMESTAMP"/>
@@ -29,40 +31,30 @@
         id,status,ec_order_no,
         ec_product_id,ec_item_id,ec_item_name,
         buy_order_no,buy_url,price,
-        agency_price,type,operator_id,
-        operator_name,executor_id,executor_name,
-        created_at,updated_at,deleted_at
+        quality,agency_price,type,
+        operator_id,operator_name,executor_id,
+        executor_name,source,created_at,
+        updated_at,deleted_at
     </sql>
 
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from assign
-        where  id = #{id,jdbcType=BIGINT} 
+        where  id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectByItemId" resultType="com.assign.entity.po.AssignPO">
+        select
+        <include refid="Base_Column_List" />
+        from assign
+        where  ec_item_id = #{itemId,jdbcType=BIGINT}
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from assign
-        where  id = #{id,jdbcType=BIGINT} 
+        where  id = #{id,jdbcType=BIGINT}
     </delete>
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.assign.entity.po.AssignPO" useGeneratedKeys="true">
-        insert into assign
-        ( id,status,ec_order_no
-        ,ec_product_id,ec_item_id,ec_item_name
-        ,buy_order_no,buy_url,price
-        ,agency_price,type,operator_id
-        ,operator_name,executor_id,executor_name
-        ,created_at,updated_at,deleted_at
-        )
-        values (#{id,jdbcType=BIGINT},#{status,jdbcType=TINYINT},#{ecOrderNo,jdbcType=VARCHAR}
-               ,#{ecProductId,jdbcType=VARCHAR},#{ecItemId,jdbcType=BIGINT},#{ecItemName,jdbcType=VARCHAR}
-               ,#{buyOrderNo,jdbcType=VARCHAR},#{buyUrl,jdbcType=VARCHAR},#{price,jdbcType=DECIMAL}
-               ,#{agencyPrice,jdbcType=DECIMAL},#{type,jdbcType=TINYINT},#{operatorId,jdbcType=BIGINT}
-               ,#{operatorName,jdbcType=VARCHAR},#{executorId,jdbcType=BIGINT},#{executorName,jdbcType=VARCHAR}
-               ,#{createdAt,jdbcType=TIMESTAMP},#{updatedAt,jdbcType=TIMESTAMP},#{deletedAt,jdbcType=TIMESTAMP}
-               )
-    </insert>
-    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.assign.entity.po.AssignPO" useGeneratedKeys="true">
         insert into assign
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
@@ -74,12 +66,14 @@
             <if test="buyOrderNo != null">buy_order_no,</if>
             <if test="buyUrl != null">buy_url,</if>
             <if test="price != null">price,</if>
+            <if test="quality != null">quality,</if>
             <if test="agencyPrice != null">agency_price,</if>
             <if test="type != null">type,</if>
             <if test="operatorId != null">operator_id,</if>
             <if test="operatorName != null">operator_name,</if>
             <if test="executorId != null">executor_id,</if>
             <if test="executorName != null">executor_name,</if>
+            <if test="source != null">source,</if>
             <if test="createdAt != null">created_at,</if>
             <if test="updatedAt != null">updated_at,</if>
             <if test="deletedAt != null">deleted_at,</if>
@@ -94,12 +88,61 @@
             <if test="buyOrderNo != null">#{buyOrderNo,jdbcType=VARCHAR},</if>
             <if test="buyUrl != null">#{buyUrl,jdbcType=VARCHAR},</if>
             <if test="price != null">#{price,jdbcType=DECIMAL},</if>
+            <if test="quality != null">#{quality,jdbcType=INTEGER},</if>
             <if test="agencyPrice != null">#{agencyPrice,jdbcType=DECIMAL},</if>
             <if test="type != null">#{type,jdbcType=TINYINT},</if>
             <if test="operatorId != null">#{operatorId,jdbcType=BIGINT},</if>
             <if test="operatorName != null">#{operatorName,jdbcType=VARCHAR},</if>
             <if test="executorId != null">#{executorId,jdbcType=BIGINT},</if>
             <if test="executorName != null">#{executorName,jdbcType=VARCHAR},</if>
+            <if test="source != null">#{source,jdbcType=TINYINT},</if>
+            <if test="createdAt != null">#{createdAt,jdbcType=TIMESTAMP},</if>
+            <if test="updatedAt != null">#{updatedAt,jdbcType=TIMESTAMP},</if>
+            <if test="deletedAt != null">#{deletedAt,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.assign.entity.po.AssignPO" useGeneratedKeys="true">
+        insert into assign
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="status != null">status,</if>
+            <if test="ecOrderNo != null">ec_order_no,</if>
+            <if test="ecProductId != null">ec_product_id,</if>
+            <if test="ecItemId != null">ec_item_id,</if>
+            <if test="ecItemName != null">ec_item_name,</if>
+            <if test="buyOrderNo != null">buy_order_no,</if>
+            <if test="buyUrl != null">buy_url,</if>
+            <if test="price != null">price,</if>
+            <if test="quality != null">quality,</if>
+            <if test="agencyPrice != null">agency_price,</if>
+            <if test="type != null">type,</if>
+            <if test="operatorId != null">operator_id,</if>
+            <if test="operatorName != null">operator_name,</if>
+            <if test="executorId != null">executor_id,</if>
+            <if test="executorName != null">executor_name,</if>
+            <if test="source != null">source,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+            <if test="deletedAt != null">deleted_at,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=BIGINT},</if>
+            <if test="status != null">#{status,jdbcType=TINYINT},</if>
+            <if test="ecOrderNo != null">#{ecOrderNo,jdbcType=VARCHAR},</if>
+            <if test="ecProductId != null">#{ecProductId,jdbcType=VARCHAR},</if>
+            <if test="ecItemId != null">#{ecItemId,jdbcType=BIGINT},</if>
+            <if test="ecItemName != null">#{ecItemName,jdbcType=VARCHAR},</if>
+            <if test="buyOrderNo != null">#{buyOrderNo,jdbcType=VARCHAR},</if>
+            <if test="buyUrl != null">#{buyUrl,jdbcType=VARCHAR},</if>
+            <if test="price != null">#{price,jdbcType=DECIMAL},</if>
+            <if test="quality != null">#{quality,jdbcType=INTEGER},</if>
+            <if test="agencyPrice != null">#{agencyPrice,jdbcType=DECIMAL},</if>
+            <if test="type != null">#{type,jdbcType=TINYINT},</if>
+            <if test="operatorId != null">#{operatorId,jdbcType=BIGINT},</if>
+            <if test="operatorName != null">#{operatorName,jdbcType=VARCHAR},</if>
+            <if test="executorId != null">#{executorId,jdbcType=BIGINT},</if>
+            <if test="executorName != null">#{executorName,jdbcType=VARCHAR},</if>
+            <if test="source != null">#{source,jdbcType=TINYINT},</if>
             <if test="createdAt != null">#{createdAt,jdbcType=TIMESTAMP},</if>
             <if test="updatedAt != null">#{updatedAt,jdbcType=TIMESTAMP},</if>
             <if test="deletedAt != null">#{deletedAt,jdbcType=TIMESTAMP},</if>
@@ -132,6 +175,9 @@
             <if test="price != null">
                 price = #{price,jdbcType=DECIMAL},
             </if>
+            <if test="quality != null">
+                quality = #{quality,jdbcType=INTEGER},
+            </if>
             <if test="agencyPrice != null">
                 agency_price = #{agencyPrice,jdbcType=DECIMAL},
             </if>
@@ -149,6 +195,9 @@
             </if>
             <if test="executorName != null">
                 executor_name = #{executorName,jdbcType=VARCHAR},
+            </if>
+            <if test="source != null">
+                source = #{source,jdbcType=TINYINT},
             </if>
             <if test="createdAt != null">
                 created_at = #{createdAt,jdbcType=TIMESTAMP},
@@ -173,12 +222,14 @@
             buy_order_no =  #{buyOrderNo,jdbcType=VARCHAR},
             buy_url =  #{buyUrl,jdbcType=VARCHAR},
             price =  #{price,jdbcType=DECIMAL},
+            quality =  #{quality,jdbcType=INTEGER},
             agency_price =  #{agencyPrice,jdbcType=DECIMAL},
             type =  #{type,jdbcType=TINYINT},
             operator_id =  #{operatorId,jdbcType=BIGINT},
             operator_name =  #{operatorName,jdbcType=VARCHAR},
             executor_id =  #{executorId,jdbcType=BIGINT},
             executor_name =  #{executorName,jdbcType=VARCHAR},
+            source =  #{source,jdbcType=TINYINT},
             created_at =  #{createdAt,jdbcType=TIMESTAMP},
             updated_at =  #{updatedAt,jdbcType=TIMESTAMP},
             deleted_at =  #{deletedAt,jdbcType=TIMESTAMP}

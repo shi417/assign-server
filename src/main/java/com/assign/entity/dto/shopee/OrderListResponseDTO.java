@@ -41,7 +41,7 @@ public class OrderListResponseDTO {
 
     @ApiModelProperty(value = "币别")
     private String currency;
-    @JsonProperty("order_list")
+    @JsonProperty("orderList")
     private List<ShopeeDetailResponseDTO> itemList;
 
 }

@@ -16,10 +16,10 @@ public class CommonDTO {
     /**
      *页面大小
      */
-    private int pageSize;
+    private Integer pageSize;
 
     /**
      * 游标
      */
-    private int currentPage;
+    private Integer currentPage;
 }

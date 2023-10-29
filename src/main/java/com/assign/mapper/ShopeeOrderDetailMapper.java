@@ -30,4 +30,6 @@ public interface ShopeeOrderDetailMapper extends BaseMapper<ShopeeOrderDetailPO>
     int updateByPrimaryKey(ShopeeOrderDetailPO record);
 
     List<ShopeeDetailResponseDTO> selectByOrderSn(@Param("orderSn") String orderSn);
+
+    ShopeeOrderDetailPO selectByItemId(@Param("itemId")Long ecItemId, @Param("orderNo")String ecOrderNo);
 }
