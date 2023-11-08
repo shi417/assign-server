@@ -32,6 +32,8 @@ public interface ShopeeOrderFeignServer {
     @GetMapping(value = ShopeePathConstants.GET_SHOP_INFO , headers = {"content-type=application/json", "userAgent=PC"}, consumes = MediaType.APPLICATION_JSON_VALUE)
     ShopeeShopVO getShopInfo(@SpringQueryMap ShopeeShopRequestVO reqParams);
 
+    @GetMapping(value = ShopeePathConstants.GET_PAYMENT_INFO , headers = {"content-type=application/json", "userAgent=PC"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    String getPayment(@SpringQueryMap ShopeePaymentRequestVO reqParams);
 //    @PostMapping(value = "/api/v2/public/get_shops_by_partner")
 //    Object fetchShopList(@RequestHeader Map<String, String> headerMap,@RequestParam Map<String, String> reqParams,@RequestBody OrderReqBodyDTO reqBody);
 

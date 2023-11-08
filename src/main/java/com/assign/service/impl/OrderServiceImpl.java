@@ -7,6 +7,7 @@ import com.assign.entity.common.PageResult;
 import com.assign.entity.dto.shopee.OrderListResponseDTO;
 import com.assign.entity.dto.shopee.ShopeeDetailResponseDTO;
 import com.assign.entity.dto.shopee.ShopeeOrderRequestDTO;
+import com.assign.entity.dto.shopee.feign.ShopeePaymentRequestVO;
 import com.assign.entity.dto.shopee.feign.ShopeeShopRequestVO;
 import com.assign.entity.dto.shopee.feign.ShopeeShopVO;
 import com.assign.entity.po.ShopeeOrderPO;
@@ -26,6 +27,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -105,6 +108,24 @@ public class OrderServiceImpl  extends ServiceImpl<ShopeeOrderMapper,ShopeeOrder
         result.setData(orders);
         result.setTotalNum(page.getTotal());
         return result;
+    }
+
+    @Override
+    public void getPaymentTest() {
+        ShopeePaymentRequestVO param = new ShopeePaymentRequestVO();
+        param.setPage_no(1);
+        param.setPage_size(20);
+        LocalDate today = LocalDate.now();
+        LocalDate lastMonthFirstDay = today.minusMonths(1).withDayOfMonth(1);
+
+        Long t = lastMonthFirstDay.atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
+        param.setPayout_time_from(t);
+        LocalDate lastMonthLastDay = today.minusMonths(1).withDayOfMonth(today.minusMonths(1).lengthOfMonth());
+        t = lastMonthLastDay.atStartOfDay(ZoneId.systemDefault()).toEpochSecond() ;
+        param.setPayout_time_to(t);
+        shopeeReqHandler.initCommonParam(param,992185921, ShopeePathConstants.GET_PAYMENT_INFO);
+        String payment = shopeeOrderFeignServer.getPayment(param);
+        System.out.println(payment);
     }
 
 }

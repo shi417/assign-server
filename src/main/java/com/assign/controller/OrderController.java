@@ -52,5 +52,11 @@ public class OrderController {
     }
 
 
+    @PostMapping("/getPaymentTest")
+    public void getPaymentTest(){
+//        orderTask.fetchOrders();
+        orderService.getPaymentTest();
+    }
+
 }
 

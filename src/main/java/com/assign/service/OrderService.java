@@ -18,4 +18,6 @@ public interface OrderService extends IService<ShopeeOrderPO>{
     Date getMaxUpdateDate(Integer shopId);
 
     PageResult<OrderListResponseDTO> getOrderList(ShopeeOrderRequestDTO params);
+
+    void getPaymentTest();
 }
