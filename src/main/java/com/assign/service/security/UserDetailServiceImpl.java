@@ -1,9 +1,9 @@
 package com.assign.service.security;
 
 import com.assign.entity.po.StaffPO;
-import com.assign.service.StaffService;
+import com.assign.service.common.impl.CommonServiceImpl;
+import com.assign.service.staff.StaffService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-public class UserDetailServiceImpl implements UserDetailsService {
+public class UserDetailServiceImpl extends CommonServiceImpl implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
 

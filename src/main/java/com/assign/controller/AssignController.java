@@ -1,15 +1,9 @@
 package com.assign.controller;
 
-import com.alibaba.nacos.common.utils.StringUtils;
-import com.assign.entity.common.PageResult;
 import com.assign.entity.common.ResponseResult;
 import com.assign.entity.dto.assign.AssignRequestDTO;
-import com.assign.entity.dto.shopee.OrderListResponseDTO;
-import com.assign.entity.dto.shopee.ShopeeOrderRequestDTO;
 import com.assign.entity.po.AssignPO;
-import com.assign.entity.po.ShopeeOrderPO;
-import com.assign.service.AssignService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.assign.service.assign.AssignService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

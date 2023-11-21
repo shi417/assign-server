@@ -1,8 +1,10 @@
 package com.assign.util;
 
-import com.assign.entity.dto.shopee.feign.CommonRequestVO;
+import com.assign.feign.vo.CommonRequestVO;
 import com.assign.entity.po.TokensPO;
-import com.assign.service.TokenService;
+import com.assign.service.common.TokenService;
+import lombok.Data;
+import org.jcodec.common.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,7 @@ import java.util.Map;
  * @date 2023/9/13.
  */
 @Component
+@Data
 public class ShopeeReqHandler {
 
     @Value("${shopee.partnerId}")
@@ -32,21 +35,29 @@ public class ShopeeReqHandler {
 
     @Autowired
     private TokenService tokenService;
-    public  Map<String, Object> getShopeeReqHeaders(Integer shopId,String path){
-        Map<String,Object> headers = new HashMap<>();
+
+    public Map<String, Object> getShopeeReqHeaders(Integer shopId, String path) {
+        Map<String, Object> headers = new HashMap<>();
         long timestamp = System.currentTimeMillis();
-        headers.put("partner_id",partnerId);
-        headers.put("timestamp",timestamp);
-        TokensPO token =  tokenService.getTokenById(shopId);
-        headers.put("access_token",token.getAccessToken());
-        headers.put("shop_id",shopId);
-        headers.put("sign",getSign(path,timestamp,token,shopId));
+        headers.put("partner_id", partnerId);
+        headers.put("timestamp", timestamp);
+        TokensPO token = tokenService.getTokenById(shopId);
+        headers.put("access_token", token.getAccessToken());
+        headers.put("shop_id", shopId);
+        headers.put("sign", getSign(path, timestamp, token.getAccessToken(), shopId));
         return headers;
     }
 
-    public String getSign(String path, long timestamp, TokensPO token, Integer shopId) {
+    public String getSign(String path, long timestamp, String token, Integer shopId) {
         String tmpPartnerKey = key;
-        String tmpBaseString = String.format("%s%s%s%s%s", partnerId, path, timestamp,token.getAccessToken(),shopId);
+
+        String tmpBaseString = String.format("%s%s%s", partnerId, path, timestamp);
+        if (!StringUtils.isEmpty(token)) {
+            tmpBaseString += token;
+        }
+        if (shopId != null && shopId != 0) {
+            tmpBaseString += shopId;
+        }
         byte[] partnerKey;
         byte[] baseString;
         String sign = "";
@@ -56,7 +67,7 @@ public class ShopeeReqHandler {
             Mac mac = Mac.getInstance("HmacSHA256");
             SecretKeySpec secret_key = new SecretKeySpec(partnerKey, "HmacSHA256");
             mac.init(secret_key);
-            sign = String.format("%064x",new BigInteger(1,mac.doFinal(baseString)));
+            sign = String.format("%064x", new BigInteger(1, mac.doFinal(baseString)));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -64,14 +75,14 @@ public class ShopeeReqHandler {
     }
 
 
-    public void initCommonParam(CommonRequestVO dto, int shopId, String path){
+    public void initCommonParam(CommonRequestVO dto, int shopId, String path) {
         dto.setPartner_id(partnerId);
-        TokensPO token =  tokenService.getTokenById(shopId);
+        TokensPO token = tokenService.getTokenById(shopId);
         dto.setAccess_token(token.getAccessToken());
         dto.setShop_id(shopId);
-        long timestamp = System.currentTimeMillis()/1000;
+        long timestamp = System.currentTimeMillis() / 1000;
         dto.setTimestamp(timestamp);
-        dto.setSign(getSign(path,timestamp, token, shopId));
+        dto.setSign(getSign(path, timestamp, token.getAccessToken(), shopId));
     }
 
 }

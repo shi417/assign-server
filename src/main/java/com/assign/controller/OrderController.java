@@ -4,15 +4,11 @@ import com.assign.entity.common.PageResult;
 import com.assign.entity.common.ResponseResult;
 import com.assign.entity.dto.shopee.OrderListResponseDTO;
 import com.assign.entity.dto.shopee.ShopeeOrderRequestDTO;
-import com.assign.entity.dto.shopee.feign.ShopeeOrderRequireDTO;
-import com.assign.entity.po.ShopeeOrderPO;
-import com.assign.service.OrderService;
+import com.assign.service.order.OrderService;
 import com.assign.task.OrderTask;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
@@ -56,6 +52,11 @@ public class OrderController {
     public void getPaymentTest(){
 //        orderTask.fetchOrders();
         orderService.getPaymentTest();
+    }
+
+    @PostMapping("/getPaymentList")
+    public void getPaymentList(){
+        orderService.getPaymentList();
     }
 
 }

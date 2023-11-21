@@ -4,13 +4,16 @@ import cn.hutool.core.convert.Convert;
 import com.assign.common.mdoel.ShopeeResult;
 import com.assign.constants.ShopeePathConstants;
 import com.assign.entity.dto.shopee.ShopeeOrderDetailDTO;
-import com.assign.entity.dto.shopee.feign.*;
 import com.assign.entity.po.ShopeeOrderDetailPO;
 import com.assign.entity.po.ShopeeOrderPO;
-import com.assign.feign.ShopeeOrderFeignServer;
-import com.assign.service.OrderDetailService;
-import com.assign.service.OrderService;
-import com.assign.service.TokenService;
+import com.assign.feign.ShopeeFeignServer;
+import com.assign.feign.vo.OrderDetailRequestVO;
+import com.assign.feign.vo.OrderListRequestVO;
+import com.assign.feign.vo.ShopeeOrderRequireDTO;
+import com.assign.feign.vo.ShopeeSimpleVO;
+import com.assign.service.order.OrderDetailService;
+import com.assign.service.order.OrderService;
+import com.assign.service.common.TokenService;
 import com.assign.util.ShopeeReqHandler;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +39,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderTask {
 
-    private final ShopeeOrderFeignServer shopeeOrderServer;
+    private final ShopeeFeignServer shopeeOrderServer;
 
     private final TokenService tokenService;
 
