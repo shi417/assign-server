@@ -166,7 +166,11 @@ public class OrderTask {
 
         }
         log.info("更新明细:{}",details.size());
-        orderDetailService.saveOrUpdateBatch(details);
+        try{
+            orderDetailService.saveOrUpdateBatch(details);
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
     }
 
     private OrderDetailRequestVO genDetailRequestParam(int shopId) {

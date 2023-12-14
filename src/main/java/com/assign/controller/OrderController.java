@@ -42,7 +42,7 @@ public class OrderController {
         new Thread( new Runnable() {
             @Override
             public void run() {
-                orderTask.fetchAllOrders();
+                orderTask.fetchOrders();
             }
         }).start();
     }
